@@ -157,10 +157,7 @@ angular.module('salesApp.sales', ['ngRoute' , 'smart-table', 'ui.bootstrap'])
             url : 'fixture/sales.json?v='+(Math.random()),
             data : payload
         }).then(function mySuccess(response) {
-            console.log(response.data);
             $scope.salesResponseData = response.data;
-            console.log($scope.salesResponseData);
-            console.log($scope.customerDetails);
             if ($scope.salesResponseData.status){
             	$scope.open();
             }else {
@@ -212,7 +209,11 @@ angular.module('salesApp.sales', ['ngRoute' , 'smart-table', 'ui.bootstrap'])
         $scope.customerDetails.phone = value.phone || '';
         $scope.customerDetails.address = value.address || '';
     }
-
+    
+    $scope.setFocusTo = function(formElementToFocus){
+        document.salesForm[formElementToFocus].focus();
+    }
+    
     $scope.selectProductFrmList = function(value, type){
         $scope.curentProduct.id = value.id || "";
         $scope.curentProduct.name = value.name || '';
@@ -254,8 +255,7 @@ angular.module('salesApp.sales', ['ngRoute' , 'smart-table', 'ui.bootstrap'])
         }
     }
     
-    $scope.addProduct = function(){
-        
+    $scope.addProduct = function($event){
         $scope.curentProduct.quantity = parseInt($scope.curentProduct.quantity, 10);
         if(!isNaN($scope.curentProduct.quantity) && !isNaN($scope.curentProduct.price)){
             $scope.curentProduct.totalPrice = toDecimalPrecision($scope.curentProduct.quantity * $scope.curentProduct.price);
@@ -324,7 +324,6 @@ angular.module('salesApp.sales', ['ngRoute' , 'smart-table', 'ui.bootstrap'])
     
     var calculateTaxTypeTotal = function(){
         var taxTypes = {},  taxType = '', taxTypeSum = 0;
-        console.log($scope.selectedProducts);
         for(var i=0; i<$scope.selectedProducts.length; i++){
             taxType = $scope.selectedProducts[i].taxType;
            if(taxTypes[taxType] === undefined){
