@@ -9,6 +9,8 @@ angular.module('salesApp.report', ['ngRoute'])
   });
 }])
 
-.controller('ReportCtrl', [function() {
-
+.controller('ReportCtrl', ['$scope',function($scope) {
+	$scope.init= function(){
+		updateMyLink();
+	}
 }]);

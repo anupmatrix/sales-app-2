@@ -1,1 +1,61 @@
-<h1>This is the partial for Report page.</h1>
+<h1>This is the partial for Report -2 page.</h1>
+
+
+
+<fieldset class="product-list-section" ng-init="init()">
+ <legend class="product-list-section">Product List</legend>
+    <div class="center-block" style="width:97%;margin:0 auto">
+        <table st-table="selectedProducts" class="table table-bordered">
+            <thead>
+            <tr style="background-color:#f5f2f0">
+                <th style="width:5%">S.No.</th>
+                <th style="width:20%">Particulars</th>
+                <th style="width:20%">serial No</th>
+                <th style="width:5%">Qty</th>
+                <th style="width:15%">Rate</th>
+                <th style="width:15%">Tax Type</th>
+                <th style="width:10%">Tax Amount</th>
+                <th style="width:10%">Total Amount</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="row in selectedProducts">
+                <td>{{$index+1}}</td>
+                <td>{{row.name}}</td>
+                <td>{{row.sn}}</td>
+                <td><span class="pull-right">{{row.quantity}}</span></td>
+                <td><span class="pull-right">{{row.totalPrice}}</span></td>
+                <td>{{row.taxType}} ({{row.taxValue}}%)</td>
+                <td><span class="pull-right">{{row.taxAmmount}}</span></td>
+                <td><span class="pull-right">{{row.grandTotal}}</span></td>
+                <td>
+                    <button type="button" ng-click="removeRow(row)" class="btn btn-sm btn-danger">
+                        <i class="glyphicon glyphicon-remove-circle"></i>
+                    </button>
+                </td>                
+            </tr>
+            </tbody>
+            <tfoot>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th><span class="pull-right">{{productTotal.totalPrice}}</span></th>
+                
+                <th colspan="2">
+                    <div class="pull-right">{{productTotal.taxAmmount}}</div>
+                    <hr>
+                    <div class="pull-right">
+                    <div style="font-weight:normal" ng-repeat="x in taxTypeTotal">{{x.taxType}} ({{x.taxRate}}%) - {{x.taxAmmount.toFixed(2)}}</div>                
+                    </div>
+                </th>
+                <th><span class="pull-right">{{productTotal.grandTotal}}</span></th>
+                <th></th>
+            </tr>
+            </tfoot>
+        </table>
+    </div>  
+</fieldset>
+
+

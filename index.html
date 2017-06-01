@@ -53,32 +53,42 @@
         	var win = window.open("login.html", '_self');
           	win.focus();
         }   
+      
         window.onhashchange = function () {
-            var winHash = window.location.hash;
-			var activeElem = document.getElementsByClassName("top-menu");
-			console.log(activeElem);
-			if(activeElem.length >0 ){
-				for(var i=0; i<activeElem.length; i++){
-					activeElem[i].classList.remove('active');				
-				}
-			}
-			
-			
-			console.log(winHash);
-			switch(winHash){
-			case "#!/sales":
-				document.getElementById('sales-top-menu').classList.add('active');
-			break;
+            mapHashChangeToMenuUpdate ();            
+        } 	
 
-			case "#!/repair":
-				document.getElementById('repair-top-menu').classList.add('active');
-			break;
-			case "#!/report":
-				document.getElementById('report-top-menu').classList.add('active');
-			break;
-					
-			}
-        } 	       
+        function mapHashChangeToMenuUpdate (){
+          var winHash = window.location.hash;
+          var activeElem = document.getElementsByClassName("top-menu");
+          console.log(activeElem);
+          if(activeElem.length >0 ){
+            for(var i=0; i<activeElem.length; i++){
+              activeElem[i].classList.remove('active');       
+            }
+          }
+          
+          
+          console.log(winHash);
+          switch(winHash){
+          case "#!/sales":
+            document.getElementById('sales-top-menu').classList.add('active');
+          break;
+
+          case "#!/repair":
+            document.getElementById('repair-top-menu').classList.add('active');
+          break;
+          case "#!/report":
+            document.getElementById('report-top-menu').classList.add('active');
+          break;
+              
+          }
+        }
+
+
+        function updateMyLink(){
+          mapHashChangeToMenuUpdate ();
+        }       
      </script>
 </head>
 <body>
