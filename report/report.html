@@ -1,9 +1,44 @@
-<h1>This is the partial for Report -2 page.</h1>
+<h1> SERVICE REPORT </h1>
 
 
 
-<fieldset class="product-list-section" ng-init="init()">
- <legend class="product-list-section">Product List</legend>
+<div class="container" ng-init="init()">
+		<div class=row>
+			<div class="form-group">
+                <label class="control-label col-sm-2" for="cust-name">Enter Text:</label>
+                <div class="col-sm-6">
+                    <!--<input ng-model="customerName" type="text" class="form-control" id="cust-name" placeholder="Enter customer name"/> <br/>-->
+                    <input type="text" ng-model="customerDetails.name" placeholder="search records" 
+                    class="form-control" aria-autocomplete="list" 
+                    aria-expanded="false" aria-owns="typeahead-81-4942"
+                    id="cust-name"
+                    name="customerName"
+                    ng-enter="searchTextAsPerFilterOption()"
+                    autocomplete="off"
+                    autofocus
+                    required
+                    />    
+                <span class="errMsg" ng-show="salesForm.customerName.$touched && salesForm.customerName.$error.required">Enter Search Text</span>                
+                </div>
+                <div class="col-sm-4">
+                	<select ng-model="selectedFilterOption" ng-options="x for x in searchFilterOptions">
+					</select>	
+                </div>
+                
+            </div>
+
+
+		</div>
+		<div class="row">
+			<div class="col-sm-8" ng-if="errorInSearchOptions !== ''">
+				<legend > {{errorInSearchOptions}}  </legend>
+			</div>
+
+
+		</div>
+		<div class="row">
+				<fieldset class="product-list-section" >
+ <legend class="product-list-section">Result List</legend>
     <div class="center-block" style="width:97%;margin:0 auto">
         <table st-table="selectedProducts" class="table table-bordered">
             <thead>
@@ -57,5 +92,13 @@
         </table>
     </div>  
 </fieldset>
+			
+
+		</div>
+
+
+</div>
+
+
 
 
