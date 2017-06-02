@@ -7,12 +7,19 @@ angular.module('salesApp', [
   'salesApp.view2',
   'salesApp.sales',
   'salesApp.repair',
+  'salesApp.service',
   'salesApp.report',
   'salesApp.version',
   'salesApp.date',
   'salesApp.modal',
   'ui.bootstrap',
-  'smart-table'
+  'smart-table',
+  'salesApp.services.customers',
+  'salesApp.services.products',
+  'salesApp.services.tax',
+  'salesApp.services.Util',
+  'checklist-model',
+  'salesApp.services.validation',
 ]).
 config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
   $locationProvider.hashPrefix('!');

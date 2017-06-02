@@ -6,7 +6,7 @@ angular.module('salesApp.sales', ['ngRoute' , 'smart-table', 'ui.bootstrap'])
     controller: 'SalesCtrl'
   });
 }])
-.controller('SalesCtrl', ['$scope', '$http', '$uibModal', '$log' ,function($scope, $http, $modal, $log) {
+.controller('SalesCtrl', ['$scope', '$http', '$uibModal', '$log', 'taxService', 'Util', function($scope, $http, $modal, $log, taxService, Util) {
     $scope.customerDetails = {
       "id": "",
       "name": "",
@@ -63,51 +63,27 @@ angular.module('salesApp.sales', ['ngRoute' , 'smart-table', 'ui.bootstrap'])
             totalItems:0
         }
     };
-    var jsDateConversionFunction = function(now) {
-      var year = "" + now.getFullYear();
-      var month = "" + (now.getMonth() + 1); if (month.length == 1) { month = "0" + month; }
-      var day = "" + now.getDate(); if (day.length == 1) { day = "0" + day; }
-      var hour = "" + now.getHours(); if (hour.length == 1) { hour = "0" + hour; }
-      var minute = "" + now.getMinutes(); if (minute.length == 1) { minute = "0" + minute; }
-      var second = "" + now.getSeconds(); if (second.length == 1) { second = "0" + second; }
-      $scope.dateValue = day + "-" + month + "-" + year + " (" + hour + ":" + minute + ":" + second  + ")";
-      return year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
-    }    
-    
-    var setCurrentProductBlank = function(){
-        $scope.curentProduct = { orderDate:jsDateConversionFunction($scope.salesDate), name: "",  model: "",  sn: "",  quantity: "", price: "", totalPrice:0, taxType:0, taxValue:0, taxAmmount:0, grandTotal:0 };
-        return $scope.curentProduct;
+    var getCurrentProductBlank = function(){
+        return { orderDate:Util.jsDateConversionFunction($scope.salesDate), name: "",  model: "",  sn: "",  quantity: "", price: "", totalPrice:0, taxType:0, taxValue:0, taxAmmount:0, grandTotal:0 };
     };
     
-    var toDecimalPrecision = function(amount, decimalPosition){
-        if(decimalPosition == undefined || isNaN(decimalPosition)){
-            decimalPosition = 2;
-        }
-        if(amount){
-            amount = parseFloat(amount,10);
-            amount = amount.toFixed(decimalPosition);
-            amount = parseFloat(amount,10);
-        }
-        
-        return amount;
-    }
     
     var calculateTotal = function(){
         var selProLen = $scope.selectedProducts.length;
         $scope.productTotal = setInitialValuforTotals();
         if(selProLen > 0){
             for(var i=0; i<selProLen; i++){
-                $scope.productTotal.taxAmmount += toDecimalPrecision($scope.selectedProducts[i].taxAmmount);
-                $scope.productTotal.totalPrice += toDecimalPrecision($scope.selectedProducts[i].totalPrice);
-                $scope.productTotal.grandTotal += toDecimalPrecision($scope.selectedProducts[i].grandTotal);
-                $scope.productTotal.totalItems += toDecimalPrecision($scope.selectedProducts[i].quantity);
+                $scope.productTotal.taxAmmount += Util.toDecimalPrecision($scope.selectedProducts[i].taxAmmount);
+                $scope.productTotal.totalPrice += Util.toDecimalPrecision($scope.selectedProducts[i].totalPrice);
+                $scope.productTotal.grandTotal += Util.toDecimalPrecision($scope.selectedProducts[i].grandTotal);
+                $scope.productTotal.totalItems += Util.toDecimalPrecision($scope.selectedProducts[i].quantity);
             }
         }
 
-        $scope.productTotal.taxAmmount = toDecimalPrecision($scope.productTotal.taxAmmount, 2);
-        $scope.productTotal.totalPrice = toDecimalPrecision($scope.productTotal.totalPrice, 2);
-        $scope.productTotal.grandTotal = toDecimalPrecision($scope.productTotal.grandTotal, 2);
-        $scope.productTotal.totalItems = toDecimalPrecision($scope.productTotal.totalItems, 2);
+        $scope.productTotal.taxAmmount = Util.toDecimalPrecision($scope.productTotal.taxAmmount, 2);
+        $scope.productTotal.totalPrice = Util.toDecimalPrecision($scope.productTotal.totalPrice, 2);
+        $scope.productTotal.grandTotal = Util.toDecimalPrecision($scope.productTotal.grandTotal, 2);
+        $scope.productTotal.totalItems = Util.toDecimalPrecision($scope.productTotal.totalItems, 2);
 
         
         $scope.paymentInfo.cash.amount = $scope.productTotal.grandTotal;
@@ -115,40 +91,11 @@ angular.module('salesApp.sales', ['ngRoute' , 'smart-table', 'ui.bootstrap'])
         $scope.paymentInfo.card.amount = $scope.productTotal.grandTotal;
         
     };
-
-    var getItemScopeMappedValue = function(type){
-        
-        var returnVal = "";
-        switch(type){
-            case "NAME": 
-               returnVal = $scope.curentProduct.name;
-            break;
-            case "MODEL": 
-               returnVal = $scope.curentProduct.model;
-            break;
-            case "SN": 
-               returnVal = $scope.curentProduct.sn;
-            break;
-            default:
-                returnVal = "";            
-        }
-        return returnVal;
-        
-    };
     
-    var getTaxValue = function(taxType){
-            var taxValue = 0;
-            for(var k in $scope.taxTypes){
-                if($scope.taxTypes[k].name == taxType){
-                      taxValue = $scope.taxTypes[k].value;
-                }
-            }
-        return taxValue;
-    }
 
     var setCurrentProductTax = function(taxType){
         $scope.curentProduct.taxType =  taxType;
-        $scope.curentProduct.taxValue = parseFloat(getTaxValue(taxType),10);
+        $scope.curentProduct.taxValue = parseFloat(Util.getTaxValue(taxType, $scope.taxTypes),10);
     };
     
     var salesAjaxCall = function(payload){
@@ -171,7 +118,7 @@ angular.module('salesApp.sales', ['ngRoute' , 'smart-table', 'ui.bootstrap'])
         
     };
     
-    $scope.curentProduct = setCurrentProductBlank();
+    $scope.curentProduct = getCurrentProductBlank();
 
     $scope.productTotal = setInitialValuforTotals();
 
@@ -245,26 +192,26 @@ angular.module('salesApp.sales', ['ngRoute' , 'smart-table', 'ui.bootstrap'])
     $scope.calculateProductCosting = function()	{
     	$scope.curentProduct.quantity = parseInt($scope.curentProduct.quantity, 10);
         if(!isNaN($scope.curentProduct.quantity) && !isNaN($scope.curentProduct.price)){
-        	$scope.curentProduct.grandTotal  = toDecimalPrecision($scope.curentProduct.quantity * $scope.curentProduct.price);
+        	$scope.curentProduct.grandTotal  = Util.toDecimalPrecision($scope.curentProduct.quantity * $scope.curentProduct.price);
         }
         if(!isNaN($scope.curentProduct.grandTotal) && !isNaN($scope.curentProduct.taxValue)){
-            $scope.curentProduct.taxAmmount = toDecimalPrecision(($scope.curentProduct.grandTotal * $scope.curentProduct.taxValue)/100);
+            $scope.curentProduct.taxAmmount = Util.toDecimalPrecision(($scope.curentProduct.grandTotal * $scope.curentProduct.taxValue)/100);
         }
         if(!isNaN($scope.curentProduct.taxAmmount)){
-        	$scope.curentProduct.totalPrice = toDecimalPrecision($scope.curentProduct.grandTotal - $scope.curentProduct.taxAmmount);
+        	$scope.curentProduct.totalPrice = Util.toDecimalPrecision($scope.curentProduct.grandTotal - $scope.curentProduct.taxAmmount);
         }
     }
     
     $scope.addProduct = function($event){
         $scope.curentProduct.quantity = parseInt($scope.curentProduct.quantity, 10);
         if(!isNaN($scope.curentProduct.quantity) && !isNaN($scope.curentProduct.price)){
-            $scope.curentProduct.totalPrice = toDecimalPrecision($scope.curentProduct.quantity * $scope.curentProduct.price);
+            $scope.curentProduct.totalPrice = Util.toDecimalPrecision($scope.curentProduct.quantity * $scope.curentProduct.price);
         }
         if(!isNaN($scope.curentProduct.totalPrice) && !isNaN($scope.curentProduct.taxValue)){
-            $scope.curentProduct.taxAmmount = toDecimalPrecision(($scope.curentProduct.totalPrice * $scope.curentProduct.taxValue)/100);
+            $scope.curentProduct.taxAmmount = Util.toDecimalPrecision(($scope.curentProduct.totalPrice * $scope.curentProduct.taxValue)/100);
         }
         if(!isNaN($scope.curentProduct.taxAmmount)){
-            $scope.curentProduct.grandTotal = toDecimalPrecision($scope.curentProduct.taxAmmount + $scope.curentProduct.totalPrice);
+            $scope.curentProduct.grandTotal = Util.toDecimalPrecision($scope.curentProduct.taxAmmount + $scope.curentProduct.totalPrice);
         }
         $scope.calculateProductCosting();
         if($scope.isValidProductInfoforAdd()){
@@ -279,7 +226,7 @@ angular.module('salesApp.sales', ['ngRoute' , 'smart-table', 'ui.bootstrap'])
             $scope.selectedProducts.push($scope.curentProduct);  
             calculateTotal();
             $scope.taxTypeTotal = calculateTaxTypeTotal();
-            setCurrentProductBlank();
+            $scope.curentProduct = getCurrentProductBlank();
             $scope.setProductContainerToPristine();
         }
     };
