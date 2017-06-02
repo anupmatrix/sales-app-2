@@ -7,36 +7,17 @@ angular.module('salesApp.sales', ['ngRoute' , 'smart-table', 'ui.bootstrap'])
   });
 }])
 .controller('SalesCtrl', ['$scope', '$http', '$uibModal', '$log', 'taxService', 'Util', function($scope, $http, $modal, $log, taxService, Util) {
-    $scope.customerDetails = {
-      "id": "",
-      "name": "",
-      "address": "",
-      "phone": ""
-    };
+    $scope.customerDetails = {"id": "", "name": "", "address": "", "phone": ""};
     $scope.paymentInfo = {
       paymentType: "cash",
       paymentTypes: [{name: "Cash", value: "cash"},
                     {name: "Card Pyment", value: "card"},
                     {name: "Cheque", value: "cheq"}],
       cardTypes:["RuPay", "VISA", "MaeterCard", "American Express", "Chase", "Discover"],
-      cash: {
-        amount:0
-      },
-      card:{
-        amount:0,
-        bankName:'',
-        cardNumber:'',
-        expDate:'',
-        cardNetwork:'',
-        cardBank:''
-      },
-      cheq:{
-        amount:0,
-        bankName:'',
-        cheqNo:'',
-        cheqDate:''
-      }
-    };
+      cash: {amount:0},
+      card: {amount:0, bankName:'', cardNumber:'', expDate:'', cardNetwork:'', cardBank:''       },
+      cheq: {amount:0, bankName:'', cheqNo:'', cheqDate:'' }
+     };
     
     $scope.date = new Date();
     $scope.dateValue = null;

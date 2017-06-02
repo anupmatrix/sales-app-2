@@ -20,6 +20,7 @@ angular.module('salesApp', [
   'salesApp.services.Util',
   'checklist-model',
   'salesApp.services.validation',
+  'salesApp.services.repairService'
 ]).
 config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
   $locationProvider.hashPrefix('!');
