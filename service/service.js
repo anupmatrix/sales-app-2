@@ -24,6 +24,9 @@ function($scope, $http, $modal, $log, customerSearch, productSearch, taxService,
     $scope.serviceOrderDate = new Date();
     $scope.tentativeServiceCompletionDate = "";
     $scope.isValidProductToAdd = false;
+    $scope.serviceResponse = [];
+    $scope.serviceDate = new Date();
+    
     
     $scope.productReceivedMode = {
            receivedType:'manual', 
@@ -113,7 +116,8 @@ function($scope, $http, $modal, $log, customerSearch, productSearch, taxService,
             courierName: "",
             courierPhone: "",
             courierDocumentNo: ""
-        }        
+        },
+        serviceDate: Util.jsDateConversionFunction($scope.serviceDate)
     };
     
     $scope.removeRow = function removeRow(row) {
@@ -237,8 +241,13 @@ function($scope, $http, $modal, $log, customerSearch, productSearch, taxService,
     
     $scope.performSalesOperation = function(){
         console.log($scope.serviceRequest);
-        customerService.dropProduct().then(function(){
-            alert(11)
+        $scope.serviceRequest.serviceDate = Util.jsDateConversionFunction($scope.serviceDate);
+        $scope.serviceRequest.paymentInfo = $scope.paymentInfo;
+        
+        customerService.dropProduct().then(function(response){
+            
+            $scope.serviceResponse = response.data;
+            Util.openPrintPopUp($scope, 'service-drop');
         });
     };
 }]);
