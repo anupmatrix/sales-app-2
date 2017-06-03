@@ -1,0 +1,28 @@
+{
+	"status":true,
+	"searchResults":[{
+		"serviceNumber":"ce/2018-78",
+		"serviceDate":"12/6/2017",
+		"customerName":"hello man",
+		"customerPhone":"canon",
+		"productBrand":"89899898",
+		"productModel":"",
+		"productSN":"lk_09908090909",
+		"productQty":"89",
+		"serviceStatus":"C",
+		"technicianStatus":"hello mnjkhkjhkjhkjhkjhkj"
+	},
+{
+		"serviceNumber":"ce/2018-78",
+		"serviceDate":"12/6/2017",
+		"customerName":"hello man",
+		"customerPhone":"canon",
+		"productBrand":"89899898",
+		"productModel":"",
+		"productSN":"lk_09908090909",
+		"productQty":"89",
+		"serviceStatus":"IP",
+		"technicianStatus":"hello mnjkhkjhkjhkjhkjhkj"
+	}
+	]
+}

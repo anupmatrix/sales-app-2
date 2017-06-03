@@ -1,0 +1,144 @@
+<h1> service-pickup </h1>
+
+
+
+<div class="container" ng-init="init()">
+		<div class=row>
+			<div class="form-group">
+                <label class="control-label col-sm-2" for="cust-name">
+                <select ng-model="selectedFilterByOption" ng-options="x for x in searchFilterByOptions" ng-change="onFilterByOptionIsChanged()">
+                    </select></label>
+
+                <div class="col-sm-6" ng-if="selectedFilterByOption === 'SEARCH BY TEXT'">
+                    <!--<input ng-model="customerName" type="text" class="form-control" id="cust-name" placeholder="Enter customer name"/> <br/>-->
+                    <input type="text" ng-model="searchServiceByText" placeholder="search records" 
+                    class="form-control" aria-autocomplete="list" 
+                    aria-expanded="false" aria-owns="typeahead-81-4942"
+                    id="cust-name"
+                    name="customerName"
+                    ng-enter="searchTextAsPerFilterOption()"
+                    autocomplete="off"
+                    autofocus
+                    required
+                    />    
+
+                    <span class="errMsg" >{{serviceSearchCriteriaIncomplete}}</span>      
+                
+                </div>
+                <div class="col-sm-4" ng-if="selectedFilterByOption === 'SEARCH BY TEXT'">
+                	<select ng-model="selectedFilterOption" ng-options="x for x in searchFilterOptions">
+					</select>
+                </div>
+
+
+                 <div class="col-sm-4" ng-if="selectedFilterByOption === 'SEARCH BY DATE'">
+                   
+                 <div class="form-group">
+                <label class="control-label col-sm-2" for="serviceDateFrom">From: {{opened1}}</label>
+                <div class="col-md-10">
+                    <p class="input-group">
+                     <input
+                            class="form-control"
+                            autocomplete="off"
+                            type="date"
+                            id="service-drop-from"
+                            name="serviceDateFrom"
+                            ng-model="serviceDateFromModel"
+                            popup="d MMM yyyy"
+                            options="dateOptions"
+                            opened="opened1"
+                            my-datepicker/>              
+                    </p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="serviceDateTo">To: {{opened2}}</label>
+                <div class="col-md-10">
+                    <p class="input-group">
+                     <input
+                            class="form-control"
+                            autocomplete="off"
+                            type="date"
+                            id="service-drop-to"
+                            name="serviceDateTo"
+                            ng-model="serviceDateTo"
+                            popup="d MMM yyyy"
+                            options="dateOptions"
+                            opened="opened2"
+                            my-datepicker/>              
+                    </p>
+                </div>
+            </div>
+                </div>  
+
+             <div class="col-sm-4"  ng-if="selectedFilterByOption === 'SEARCH BY DATE'">
+             <span class="errMsg" >{{serviceSearchCriteriaIncomplete}}</span>                
+              <input class="form-control" type="submit" value="Search"  ng-click="searchTextAsPerFilterOption()"/>
+             </div>
+            </div>
+		</div>
+		<div class="row">
+			<div class="col-sm-8" ng-if="errorInSearchOptions !== ''">
+				<legend > {{errorInSearchOptions}}  </legend>
+			</div>
+
+
+		</div>
+		<div class="row">
+				<fieldset class="product-list-section" >
+ <legend class="product-list-section">Result List</legend>
+    <div class="center-block" style="width:97%;margin:0 auto">
+        <table st-table="selectedProducts" class="table table-bordered">
+            <thead>
+            <tr style="background-color:#f5f2f0">
+                <th style="width:5%">Sr. No.</th>
+                <th style="width:5%">Add/Remove</th>
+                <th style="width:5%">Service Id.</th>
+                <th style="width:5%">Service Date</th>
+                <th style="width:20%">Customer Name</th>
+                <th style="width:10%">Phone</th>
+                <th style="width:20%">Product Details</th>
+                <th style="width:15%">Serial No</th>
+                <th style="width:5%">Qty</th>
+                <th style="width:5%">Service Status</th>
+                <th style="width:20%">Technician Comments</th>
+                <th style="width:5%">View More</th>
+                
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="row in actualServiceList">
+                <td>{{$index+1}}</td>
+                <td> <button class="btn btn-block btn-success" ng-disabled="isValidStateToAddToBill(row)"> ADD</button></td>
+                <td>{{row.serviceNumber}}</td>
+                <td>{{row.serviceDate}}</td>
+                
+                <td>{{row.customerName}}</td>
+                <td>{{row.customerPhone}}</td>
+                <td>{{row.productBrand + ' '+  row.productModel }}</td>
+                <td>{{row.productSN}}</td>
+                <td>{{row.productQty}}</td>
+                <td>{{serviceStatusMapping [row.serviceStatus]}}</td>
+                <td>{{row.technicianStatus}}</td>
+                <td>More</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>  
+
+
+
+<fieldset class="sales-operation-section" ng-if="actualServiceList.length > 0">
+    <!--<legend class="sales-operation-section">Final Step</legend>-->
+    <div class="form-group" style="width:95%; margin:0 auto">
+        <button type="submit" class="btn btn-block btn-success" 
+        ng-click='performSalesOperation()'>Submit</button>
+    </div>    
+</fieldset>
+
+</div>
+
+
+
+
+
