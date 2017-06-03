@@ -300,7 +300,9 @@ angular.module('salesApp.sales', ['ngRoute' , 'smart-table', 'ui.bootstrap'])
     $scope.reloadSalesPage = function(){
         window.location.href = "index.html";
     }
-    
+    $scope.stringify = function(json){
+        return JSON.stringify(json);
+    }    
     $scope.open = function (size) {
         var modalInstance;
         var modalScope = $scope.$new();
@@ -312,7 +314,7 @@ angular.module('salesApp.sales', ['ngRoute' , 'smart-table', 'ui.bootstrap'])
         };      
         
         modalInstance = $modal.open({
-          template: '<print-modal-directive></print-modal-directive>',
+          template: '<print-modal-directive page="components/modal/modalContent.html"></print-modal-directive>',
           size: size || 'lg',
           scope: modalScope
           }

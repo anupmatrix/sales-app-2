@@ -1,6 +1,6 @@
-angular.module('salesApp.services.Util', [])
-.service('Util', ['$http',function ($http) {
-  this.jsDateConversionFunction = function (now) {
+angular.module('salesApp.services.Util', ['ui.bootstrap'])
+.service('Util', ['$http', '$uibModal', function ($http, $modal) {
+    this.jsDateConversionFunction = function (now) {
       var year = "" + now.getFullYear();
       var month = "" + (now.getMonth() + 1); if (month.length == 1) { month = "0" + month; }
       var day = "" + now.getDate(); if (day.length == 1) { day = "0" + day; }
@@ -32,6 +32,51 @@ angular.module('salesApp.services.Util', [])
         return taxValue;
     };
     
+    this.openPrintPopUp = function($scope, page ,size) {
+        var modalInstance;
+        var modalScope = $scope.$new();
+        var printPageTemplate = this.getPrintPage(page);
+        
+        modalScope.ok = function () {
+                modalInstance.close(modalScope.selected);
+        };
+        modalScope.cancel = function () {
+                modalInstance.dismiss('cancel');
+        };      
+        
+        modalInstance = $modal.open({
+          template: '<print-modal-directive page="'+printPageTemplate+'"></print-modal-directive>',
+          size: size || 'lg',
+          scope: modalScope
+          }
+        );
+
+        modalInstance.result.then(function (selectedItem) {
+          //$scope.selected = selectedItem;
+        }, function (a,b,c) {
+        	//$log.info('Modal dismissed at: ' + new Date());
+          	window.location.reload();
+        });
+  };
+
+    this.getPrintPage = function(pageType){
+        var printPageTemplate = "";
+        switch(pageType) {
+            case "service-drop":
+                printPageTemplate = 'components/modal/serviceDrop.html';
+                break;
+            case "sales-complete":
+                printPageTemplate = 'components/modal/salesComplete.html';
+                break;
+            case "service-complete":
+                printPageTemplate = 'components/modal/serviceDelivery.html';
+                break;
+            default:
+                printPageTemplate = 'components/modal/salesComplete.html';
+        }
+        
+        return printPageTemplate;
+    }
   
 }   
 ])

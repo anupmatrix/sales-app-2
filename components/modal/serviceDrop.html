@@ -29,7 +29,14 @@
         .table-condensed>thead>tr>td, .table-condensed>tbody>tr>td, .table-condensed>tfoot>tr>td{
             padding: 2px !important;
         }
-    </style>
+        address {
+            margin-bottom:0px;
+        }
+        h4, .h4, h5, .h5, h6, .h6 {
+            margin-top: 1px;
+            margin-bottom: 5px;
+        }        
+</style>
 <div class="modal-header">
     <h3 class="modal-title">Sales Confirmation</h3>
 </div>
@@ -40,17 +47,13 @@
             <td style="width:20%"><img src="static/images/logo.png" style="width:110px"/></td>
             <td style="width:60%;text-align:center">
                 <div class="invoice-title text-center" style="margin:0 auto">
-                    <h3 class="invoice-header text-center">TAX INVOICE111111</h3>
+                    <h3 class="invoice-header text-center">INVOICE</h3>
                     <h2 class="invoice-header text-center">CAMERA EMPORIUM</h2>
                 </div>
             </td>
             <td style="width:20%"></td>
         </tr>
     </table>
-
-   
-    
-    
     <div class="row">
         <div class="col-xs-12">
             <div class="panel panel-default invoice-header">
@@ -76,21 +79,21 @@
             <table class="table table-condensed no-border invoice-margin">
                 <tr>
                     <td class="col-xs-2"><span class="pull-left">Invoice</span> <span class="pull-right">:</span></td>
-                    <td class="col-xs-2">&nbsp; {{salesResponseData.invoiceId}}</td>
+                    <td class="col-xs-2">&nbsp; {{serviceResponse.invoiceId}}</td>
                     <td class="col-xs-4"></td>
                     <td class="col-xs-1"><span class="pull-right">Date</span></td>
-                    <td class="col-xs-3"><span class="pull-left">:</span>&nbsp; <span>{{dateValue}}</span></td>
+                    <td class="col-xs-3"><span class="pull-left">:</span>&nbsp; <span>{{serviceRequest.serviceDate}}</span></td>
                 </tr>
                 <tr>
                     <td class="col-xs-2"><span class="pull-left">Customer</span> <span class="pull-right">:</span></td>
-                    <td class="col-xs-2">&nbsp; {{customerDetails.name}}</td>
+                    <td class="col-xs-2">&nbsp; {{serviceRequest.customerInfo.name}}</td>
                     <td class="col-xs-4"></td>
                     <td class="col-xs-1"><span class="pull-right">Mobile</span></td>
-                    <td class="col-xs-3"><span class="pull-left">:</span>&nbsp; <span>{{customerDetails.phone}}</span></td>
+                    <td class="col-xs-3"><span class="pull-left">:</span>&nbsp; <span>{{serviceRequest.customerInfo.phone}}</span></td>
                 </tr>
                 <tr>
                     <td class="col-xs-2"><span class="pull-left">Address</span> <span class="pull-right">:</span></td>
-                    <td class="col-xs-10" colspan="4">&nbsp; {{customerDetails.address}}</td>
+                    <td class="col-xs-10" colspan="4">&nbsp; {{serviceRequest.customerInfo.address}}</td>
                 </tr>
             </table>
         </div>
@@ -98,103 +101,121 @@
 
     <div class="row">
     	<div class="col-md-12">
-
-           <table st-table="selectedProducts" class="table table-bordered">
+           <table st-table="serviceRequest" class="table table-bordered">
             <thead>
             <tr>
                 <th>S.No.</th>
                 <th>Particulars</th>
                 <th>serial No</th>
-                <th>Qty</th>
-                <th>Price per Unit</th>
-                <th>Rate</th>
-                <th>Tax Type</th>
-                <th>Tax Amount</th>
-                <th>Total Amount</th>
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="row in selectedProducts">
+            <tr ng-repeat="row in serviceRequest.productInfo">
                 <th>{{$index+1}}</th>
                 <td>{{row.name}}</td>
                 <td>{{row.sn}}</td>
-                <td><span class="pull-right">{{row.quantity}}</span></td>
-                <td><span class="pull-right">{{row.price}}</span></td>
-                <td><span class="pull-right">{{row.totalPrice}}</span></td>
-                <td><span class="pull-right">{{row.taxType}} ({{row.taxValue}}%)</span></td>
-                <td><span class="pull-right">{{row.taxAmmount}}</span></td>
-                <td><span class="pull-right">{{row.grandTotal}}</span></td>
             </tr>
             </tbody>
-            <tfoot>
-            <tr>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th><span class="pull-right">{{productTotal.totalPrice}}</span></th>
-                <th></th>
-                <th><span class="pull-right">{{productTotal.taxAmmount}}</span></th>
-                <th><span class="pull-right">{{productTotal.grandTotal}}</span></th>
-            </tr>
-            </tfoot>
         </table>
-
-
     	</div>
     </div>
     
-    <div class="row">
-        <div class="col-xs-12">
+     <div class="row">
+      <div class="form-group col-sm-4">
+        <div class="panel panel-default height width-97">
+            <div class="panel-heading">Accessries Details</div>
+            <div class="panel-body">
+                <div ng-repeat="accessory in serviceRequest.accessoryList  track by $index">
+                  {{accessory}}
+                </div>       
+                <div ng-if="serviceRequest.accessoryList.length == 0">
+                  N/A
+                </div>     
+            </div>
+        </div>      
+      </div>
+      <div class="form-group col-sm-4">
+        <div class="panel panel-default height width-97">
+            <div class="panel-heading">Compalints Found</div>
+            <div class="panel-body">
+                <div ng-repeat="problem in serviceRequest.problemLists  track by $index">
+                  {{problem}}
+                </div>     
+                <div ng-if="serviceRequest.problemLists.length == 0">
+                  N/A
+                </div>     
+            </div>
+        </div>      
+      </div>
+      <div class="form-group col-sm-4">
+        <div class="panel panel-default height width-97">
+            <div class="panel-heading">Advance Payment</div>
+            <div class="panel-body">
             <table class="table table-condensed no-border invoice-margin">
                 <tr>
-                    <td class="col-xs-2"><span class="pull-left">VAT Tin No.</span> <span class="pull-right">:</span></td>
-                    <td class="col-xs-2">&nbsp; {{salesResponseData.vatTinNumber}}</td>
-                    <td class="col-xs-8"></td>
+                    <td style="width:15%"><span class="pull-left">VAT Tin No.</span> <span class="pull-right">:</span></td>
+                    <td>&nbsp; {{serviceResponse.vatTinNumber}}</td>
                 </tr>
             </table>
             <table class="table table-condensed no-border invoice-margin" ng-if="paymentInfo.paymentType == 'cash'">
                 <tr>
-                    <td class="col-xs-2"><span class="pull-left">Payment Mode</span> <span class="pull-right">:</span></td>
-                    <td class="col-xs-2">&nbsp; CASH</td>
-                    <td class="col-xs-8"></td>
+                    <td><span class="pull-left">Payment Mode</span> <span class="pull-right">:</span></td>
+                    <td>&nbsp; CASH</td>
+                    <td></td>
                 </tr>
             </table>
             <table class="table table-condensed no-border invoice-margin" ng-if="paymentInfo.paymentType == 'cheq'">
                 <tr>
-                    <td class="col-xs-2"><span class="pull-left">Payment Mode.</span> <span class="pull-right">:</span></td>
-                    <td class="col-xs-2">&nbsp; CHEQUE</td>
-                    <td class="col-xs-4"></td>
-                    <td class="col-xs-2"><span class="pull-right">Cheque No</span></td>
-                    <td class="col-xs-2"><span class="pull-left">:</span>&nbsp; <span>{{paymentInfo.cheq.chequeNo}}</span></td>
+                    <td><span class="pull-left">Payment Mode.</span> <span class="pull-right">:</span></td>
+                    <td>&nbsp; CHEQUE</td>
+                    <td></td>
+                    <td><span class="pull-right">Cheque No</span></td>
+                    <td><span class="pull-left">:</span>&nbsp; <span>{{paymentInfo.cheq.chequeNo}}</span></td>
                 </tr>
                 <tr>
-                    <td class="col-xs-2"><span class="pull-left">Bank</span> <span class="pull-right">:</span></td>
-                    <td class="col-xs-2">&nbsp; SBI</td>
-                    <td class="col-xs-4"></td>
-                    <td class="col-xs-2"><span class="pull-right">Cheque Date.</span></td>
-                    <td class="col-xs-2"><span class="pull-left">:</span>&nbsp; <span>{{paymentInfo.cheq.chequeDate}}</span></td>
+                    <td><span class="pull-left">Bank</span> <span class="pull-right">:</span></td>
+                    <td>&nbsp; SBI</td>
+                    <td></td>
+                    <td><span class="pull-right">Cheque Date.</span></td>
+                    <td><span class="pull-left">:</span>&nbsp; <span>{{paymentInfo.cheq.chequeDate}}</span></td>
                 </tr>
             </table>
             <table class="table table-condensed no-border invoice-margin" ng-if="paymentInfo.paymentType == 'card'">
                 <tr>
-                    <td class="col-xs-2"><span class="pull-left">Payment Mode.</span> <span class="pull-right">:</span></td>
-                    <td class="col-xs-2">&nbsp; CARD</td>
-                    <td class="col-xs-4"></td>
-                    <td class="col-xs-2"><span class="pull-right">Card no.</span></td>
-                    <td class="col-xs-2"><span class="pull-left">:</span>&nbsp; <span>{{paymentInfo.card.cardNumber}}</span></td>
+                    <td><span class="pull-left">Payment Mode.</span> <span class="pull-right">:</span></td>
+                    <td>&nbsp; CARD</td>
+                    <td></td>
+                    <td><span class="pull-right">Card no.</span></td>
+                    <td><span class="pull-left">:</span>&nbsp; <span>{{paymentInfo.card.cardNumber}}</span></td>
                 </tr>
                 <tr>
-                    <td class="col-xs-2"><span class="pull-left">Bank</span> <span class="pull-right">:</span></td>
-                    <td class="col-xs-2">&nbsp; {paymentInfo.card.cardBank}</td>
-                    <td class="col-xs-4"></td>
-                    <td class="col-xs-2"><span class="pull-right">Card Network</span></td>
-                    <td class="col-xs-2"><span class="pull-left">:</span>&nbsp; <span>{{paymentInfo.card.cardNetwork}}</span></td>
+                    <td><span class="pull-left">Bank</span> <span class="pull-right">:</span></td>
+                    <td>&nbsp; {paymentInfo.card.cardBank}</td>
+                    <td></td>
+                    <td><span class="pull-right">Card Network</span></td>
+                    <td><span class="pull-left">:</span>&nbsp; <span>{{paymentInfo.card.cardNetwork}}</span></td>
                 </tr>
             </table>
-        </div>
+               
+            </div>
+        </div>       
+      </div>
+    </div> 
     
+    
+    <div class="row">
+        <div class="col-xs-12">
+            <table class="table table-bordered table-condensed invoice-margin">
+                <tr>
+                    <th>Remark</th>
+                    <td><div ng-bind="serviceRequest.customerComment"></div></td>
+                </tr>
+                <tr>
+                    <th style="width:15%">Nature of Complaints</th>
+                    <td><div ng-bind="serviceRequest.shopUserComment"></div></td>
+                </tr>
+            </table>
+       </div>
     </div>
     
     <div class="row">
@@ -205,7 +226,6 @@
                         <td id="td-terms-contents" style="width:50%">"I/We" hereby certify that my/our registration certificate  under the Maharashtra Value Added Tax Act, 2002 is in force on the date on which the sale of the goods specified in this tax invoice is made by me/us and that the transaction of sale covered by this tax invoice has been effected by me/us and it shall be accounted for in the turnover of sales while filing of return  and the due tax, if any, payable on the sale has been paid or shall be paid</td>
                         <td id="td-signature-contents" style="width:50%">
                              <div style="text-align:center">(Authorised Signature)</div>
-                        
                         </td>
                     </tr>
                 </table>

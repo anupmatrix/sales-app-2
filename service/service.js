@@ -8,8 +8,9 @@ angular.module('salesApp.service', ['ngRoute' , 'smart-table', 'ui.bootstrap'])
   });
 }])
 
-.controller('ServiceCtrl', ['$scope', '$http', '$uibModal', '$log' , 'customerSearch', 'productSearch' , 'taxService', 'Util', 'Validation',
-function($scope, $http, $modal, $log, customerSearch, productSearch, taxService, Util, Validation) {
+.controller('ServiceCtrl', ['$scope', '$http', '$uibModal', '$log' , 'customerSearch', 'productSearch' , 
+                            'taxService', 'Util', 'Validation', 'customerService',
+function($scope, $http, $modal, $log, customerSearch, productSearch, taxService, Util, Validation, customerService) {
     
     $scope.taxTypes = taxService.getTaxListService();
     $scope.problemLists = ["P1", "P2", "P3", "P4", "P5", "P6"];
@@ -23,12 +24,53 @@ function($scope, $http, $modal, $log, customerSearch, productSearch, taxService,
     $scope.serviceOrderDate = new Date();
     $scope.tentativeServiceCompletionDate = "";
     $scope.isValidProductToAdd = false;
+    $scope.serviceResponse = [];
+    $scope.serviceDate = new Date();
+    
     
     $scope.productReceivedMode = {
            receivedType:'manual', 
-           receivedModes:[{name: "Courier", value: "courier"},
-                          {name: "Manual", value: "manual"}], 
+           receivedModes:[{name: "Courier", value: "courier"}, {name: "Manual", value: "manual"}]
     };
+
+    var setCurrentProductBlank = function(){
+        $scope.curentProduct = {tentative_service_completion_date:"",
+                                service_order_date:Util.jsDateConversionFunction($scope.serviceOrderDate), 
+                                name: "",  model: "",  sn: "", 
+                                tentative_quoted_cost: "", totalPrice:0, taxType:0, taxValue:0, 
+                                taxAmmount:0, grandTotal:0 };
+        return $scope.curentProduct;
+    };
+    
+    var setProductContainerToPristine = function(){
+        $scope.serviveForm.currentProductName.$setUntouched();
+        $scope.serviveForm.currentProductModelNumber.$setUntouched();
+        $scope.serviveForm.currentProductSerialNumber.$setUntouched();
+
+        $scope.serviveForm.currentProductName.$setPristine();
+        $scope.serviveForm.currentProductModelNumber.$setPristine();
+        $scope.serviveForm.currentProductSerialNumber.$setPristine();
+    };
+
+    var setCurrentProductBlank = function(){
+        $scope.curentProduct = {tentative_service_completion_date:"",
+                                service_order_date:Util.jsDateConversionFunction($scope.serviceOrderDate), 
+                                name: "",  model: "",  sn: "", 
+                                tentative_quoted_cost: "", totalPrice:0, taxType:0, taxValue:0, 
+                                taxAmmount:0, grandTotal:0 };
+        return $scope.curentProduct;
+    };
+    
+    var setProductContainerToPristine = function(){
+        $scope.serviveForm.currentProductName.$setUntouched();
+        $scope.serviveForm.currentProductModelNumber.$setUntouched();
+        $scope.serviveForm.currentProductSerialNumber.$setUntouched();
+
+        $scope.serviveForm.currentProductName.$setPristine();
+        $scope.serviveForm.currentProductModelNumber.$setPristine();
+        $scope.serviveForm.currentProductSerialNumber.$setPristine();
+    };    
+
     $scope.paymentInfo = {
       paymentType: "cash",
       paymentTypes: [{name: "Cash", value: "cash"},
@@ -74,8 +116,10 @@ function($scope, $http, $modal, $log, customerSearch, productSearch, taxService,
             courierName: "",
             courierPhone: "",
             courierDocumentNo: ""
-        }        
+        },
+        serviceDate: Util.jsDateConversionFunction($scope.serviceDate)
     };
+    
     $scope.removeRow = function removeRow(row) {
         var index = $scope.serviceRequest.productInfo.indexOf(row);
         if (index !== -1) {
@@ -83,23 +127,6 @@ function($scope, $http, $modal, $log, customerSearch, productSearch, taxService,
         }
     }
 
-    var setCurrentProductBlank = function(){
-        $scope.curentProduct = {tentative_service_completion_date:"",
-                                service_order_date:Util.jsDateConversionFunction($scope.serviceOrderDate), 
-                                name: "",  model: "",  sn: "", 
-                                tentative_quoted_cost: "", totalPrice:0, taxType:0, taxValue:0, 
-                                taxAmmount:0, grandTotal:0 };
-        return $scope.curentProduct;
-    };
-    var setProductContainerToPristine = function(){
-        $scope.serviveForm.currentProductName.$setUntouched();
-        $scope.serviveForm.currentProductModelNumber.$setUntouched();
-        $scope.serviveForm.currentProductSerialNumber.$setUntouched();
-
-        $scope.serviveForm.currentProductName.$setPristine();
-        $scope.serviveForm.currentProductModelNumber.$setPristine();
-        $scope.serviveForm.currentProductSerialNumber.$setPristine();
-    }
     $scope.isValidCustomerAdd = function(){
         var isValidCustomerForm = false;
         if(!$scope.serviveForm.customerName.$invalid){
@@ -124,7 +151,6 @@ function($scope, $http, $modal, $log, customerSearch, productSearch, taxService,
             setProductContainerToPristine();
             $scope.isValidProductToAdd = false;
         }
-        console.log($scope.serviceRequest);
     };
         
     $scope.isValidProductToAdd = function(){
@@ -135,7 +161,6 @@ function($scope, $http, $modal, $log, customerSearch, productSearch, taxService,
         return isValid;
     };
     
-    
     $scope.isValidNewProblem = function(){
         var isValid = false;
         if($scope.newProblem.trim() !== "" && $scope.newProblem.trim().length >= 3){
@@ -143,6 +168,7 @@ function($scope, $http, $modal, $log, customerSearch, productSearch, taxService,
         }
         return isValid;
     };
+    
     $scope.isValidNewAccessory = function(){
         var isValid = false;
         if($scope.newAccessory.trim() !== "" && $scope.newAccessory.trim().length >= 3){
@@ -158,6 +184,7 @@ function($scope, $http, $modal, $log, customerSearch, productSearch, taxService,
             $scope.newProblem = "";
         }
     };  
+   
     $scope.addAccessory = function(){
         if($scope.isValidNewAccessory()){
             $scope.accessoryList.push($scope.newAccessory);
@@ -169,6 +196,7 @@ function($scope, $http, $modal, $log, customerSearch, productSearch, taxService,
     $scope.checkLastProblem = function(newProblem) {
         $scope.serviceRequest.problemLists.push(newProblem);
     };    
+    
     $scope.checkLastAccessory = function(newAccessory) {
         $scope.serviceRequest.accessoryList.push(newAccessory);
     };    
@@ -181,11 +209,10 @@ function($scope, $http, $modal, $log, customerSearch, productSearch, taxService,
             });
         });
     };
+   
     $scope.productList = function(val, type) {
-        console.log('productList');
         var productPromise = productSearch.search(val);
         productPromise.then(function(response){
-             console.log(response);
              return response.data.singleProductModelList.map(function(item){
                 return item;
             });
@@ -199,6 +226,7 @@ function($scope, $http, $modal, $log, customerSearch, productSearch, taxService,
         }
         return allowAddProduct;
     };
+    
     $scope.isValidCustomerAdd = function(){
         var isValidCustomerForm = false;
         if(!$scope[$scope.formName].customerName.$invalid){
@@ -211,4 +239,15 @@ function($scope, $http, $modal, $log, customerSearch, productSearch, taxService,
         return JSON.stringify(json);
     }
     
+    $scope.performSalesOperation = function(){
+        console.log($scope.serviceRequest);
+        $scope.serviceRequest.serviceDate = Util.jsDateConversionFunction($scope.serviceDate);
+        $scope.serviceRequest.paymentInfo = $scope.paymentInfo;
+        
+        customerService.dropProduct().then(function(response){
+            
+            $scope.serviceResponse = response.data;
+            Util.openPrintPopUp($scope, 'service-drop');
+        });
+    };
 }]);
