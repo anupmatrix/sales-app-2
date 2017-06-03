@@ -77,6 +77,21 @@ angular.module('salesApp.services.Util', ['ui.bootstrap'])
         
         return printPageTemplate;
     }
+
+    this.printPage = function(){
+        var printContents = document.getElementById("invoice-modal-full-123").innerHTML;
+        var popupWin = window.open("print.html", "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=500,left=500,width=400,height=400");    
+        if(popupWin){
+            popupWin.window.onload = function() {
+                popupWin.document.getElementById("masterContent").innerHTML = printContents;
+                popupWin.window.print();
+                popupWin.window.close();  
+            };
+        }else{
+            alert("Plese disable your pop-up blocker.. for this domain");
+        }
+    }
+    
   
 }   
 ])

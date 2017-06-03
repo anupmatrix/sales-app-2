@@ -11,10 +11,10 @@ angular.module('salesApp.service', ['ngRoute' , 'smart-table', 'ui.bootstrap'])
 .controller('ServiceCtrl', ['$scope', '$http', '$uibModal', '$log' , 'customerSearch', 'productSearch' , 
                             'taxService', 'Util', 'Validation', 'customerService',
 function($scope, $http, $modal, $log, customerSearch, productSearch, taxService, Util, Validation, customerService) {
-    
+    $scope.receiptType = "INVOICE";    
     $scope.taxTypes = taxService.getTaxListService();
-    $scope.problemLists = ["P1", "P2", "P3", "P4", "P5", "P6"];
-    $scope.accessoryList= ["A1", "A2", "A3", "A4", "A5", "A6"];
+    $scope.problemLists = ["Dust In View Finder", "Scratches on Focusing Screen", "Salt Water Damage", "Water Damage", "Fungus in Binocular", "Scratch on Body"];
+    $scope.accessoryList= ["AC Cord", "Filter UV", "Memory Card", "USB Cable", "Charger", "Battery", "Body Cap", "Lens Cap Back", "Lens Cap front"];
     $scope.newProblem = "";
     $scope.newAccessory = "";
     $scope.shopUserComment = ""
@@ -26,7 +26,7 @@ function($scope, $http, $modal, $log, customerSearch, productSearch, taxService,
     $scope.isValidProductToAdd = false;
     $scope.serviceResponse = [];
     $scope.serviceDate = new Date();
-    
+    $scope.printPage = Util.printPage;
     
     $scope.productReceivedMode = {
            receivedType:'manual', 
@@ -243,11 +243,12 @@ function($scope, $http, $modal, $log, customerSearch, productSearch, taxService,
         console.log($scope.serviceRequest);
         $scope.serviceRequest.serviceDate = Util.jsDateConversionFunction($scope.serviceDate);
         $scope.serviceRequest.paymentInfo = $scope.paymentInfo;
-        
         customerService.dropProduct().then(function(response){
-            
             $scope.serviceResponse = response.data;
             Util.openPrintPopUp($scope, 'service-drop');
         });
     };
+    $scope.reloadPage = function(){
+        window.location.reload();
+    }
 }]);

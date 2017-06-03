@@ -1,79 +1,10 @@
-<style>
-        .modal-lg{
-            width:95%;
-        }
-        .invoice-modal-full {
-            width:98% !important;
-            border:1px solid #222;
-            border-radius:3px;
-        }
-        .invoice-header, .invoice-margin{
-            margin-top:5px;
-            margin-bottom:5px;
-        }
-        .invoice-panel-padding{
-            padding:5px !important;
-        }
-        .no-border {
-            border:0px !important;
-        }
-        .no-border tr, .no-border td{
-            border:none !important;
-        }
-        .table-bordered>thead>tr>th, .table-bordered>thead>tr>td{
-            border-bottom:0px;
-        }
-        .text-center{
-            text-align:center;
-        }
-        .table-condensed>thead>tr>td, .table-condensed>tbody>tr>td, .table-condensed>tfoot>tr>td{
-            padding: 2px !important;
-        }
-        address {
-            margin-bottom:0px;
-        }
-        h4, .h4, h5, .h5, h6, .h6 {
-            margin-top: 1px;
-            margin-bottom: 5px;
-        }        
-</style>
+<link rel="stylesheet" href="components/modal/printHeaderCss.css">
 <div class="modal-header">
     <h3 class="modal-title">Sales Confirmation</h3>
 </div>
 <div class="modal-body">
 <div class="container invoice-modal-full" id="invoice-modal-full-123">
-    <table class="table table-condensed" style="margin-bottom:5px">
-        <tr>
-            <td style="width:20%"><img src="static/images/logo.png" style="width:110px"/></td>
-            <td style="width:60%;text-align:center">
-                <div class="invoice-title text-center" style="margin:0 auto">
-                    <h3 class="invoice-header text-center">INVOICE</h3>
-                    <h2 class="invoice-header text-center">CAMERA EMPORIUM</h2>
-                </div>
-            </td>
-            <td style="width:20%"></td>
-        </tr>
-    </table>
-    <div class="row">
-        <div class="col-xs-12">
-            <div class="panel panel-default invoice-header">
-                <div class="panel-body text-center invoice-panel-padding">
-                    <H4 class="invoice-header">SALES AND REPAIR FOR HANDYCAM AND DIGITAL CAMERA</H4>
-                </div>
-            </div>
-        </div>
-    </div>     
-    <div class="row">
-        <div class="col-xs-12 text-center">
-            <address>
-                <h5>
-                Shop No. 8, Kedar Empire, Near Paud Phata, Opp SNDT College, Karve Road, Pune, Maharashtra 411038 <br>
-                Ph: 020-25451046, Mob:09921-008-559, E-mail: cameraemporium@gmail.com, info@cameraemporium.com
-                <h5>
-            </address>
-        </div>
-    </div>     
-
+    <div ng-include="'components/modal/printHeader.html'"></div>
     <div class="row">
         <div class="col-xs-12">
             <table class="table table-condensed no-border invoice-margin">
@@ -120,40 +51,34 @@
     	</div>
     </div>
     
-     <div class="row">
-      <div class="form-group col-sm-4">
-        <div class="panel panel-default height width-97">
-            <div class="panel-heading">Accessries Details</div>
-            <div class="panel-body">
+
+    <table class="table table-condensed table-bordered invoice-margin">
+        <tr>
+            <td>Accessries Details</td>
+            <td>Compalints Found</td>
+            <td>Advance Payment</td>
+        </tr>
+        <tr>
+            <td>
                 <div ng-repeat="accessory in serviceRequest.accessoryList  track by $index">
                   {{accessory}}
                 </div>       
                 <div ng-if="serviceRequest.accessoryList.length == 0">
                   N/A
                 </div>     
-            </div>
-        </div>      
-      </div>
-      <div class="form-group col-sm-4">
-        <div class="panel panel-default height width-97">
-            <div class="panel-heading">Compalints Found</div>
-            <div class="panel-body">
+            </td>
+            <td>
                 <div ng-repeat="problem in serviceRequest.problemLists  track by $index">
                   {{problem}}
                 </div>     
                 <div ng-if="serviceRequest.problemLists.length == 0">
                   N/A
                 </div>     
-            </div>
-        </div>      
-      </div>
-      <div class="form-group col-sm-4">
-        <div class="panel panel-default height width-97">
-            <div class="panel-heading">Advance Payment</div>
-            <div class="panel-body">
+            </td>
+            <td>
             <table class="table table-condensed no-border invoice-margin">
                 <tr>
-                    <td style="width:15%"><span class="pull-left">VAT Tin No.</span> <span class="pull-right">:</span></td>
+                    <td style="width:15%" nowrap> <span class="pull-left">VAT Tin No.</span> </td>
                     <td>&nbsp; {{serviceResponse.vatTinNumber}}</td>
                 </tr>
             </table>
@@ -196,11 +121,11 @@
                     <td><span class="pull-left">:</span>&nbsp; <span>{{paymentInfo.card.cardNetwork}}</span></td>
                 </tr>
             </table>
-               
-            </div>
-        </div>       
-      </div>
-    </div> 
+
+
+            </td>
+        </tr>
+    </table>
     
     
     <div class="row">
@@ -219,17 +144,29 @@
     </div>
     
     <div class="row">
+        <div class="col-md-12" style="fonnt-size:12px">
+        1. The Original Memo must be produced while delivery of the equipment. Delivery may be refused if this memo is not presented. An Authorization letter is necessary from the person who has brought the set initially if the sale is not taking the delivery or the original service memo is misplaced.<br/>
+        2. The apparatus must be collected within 1 months of date of repair/rejection. After first month company will charge Rs. 10/- per day as storage charges for the following 1 months. If delivery is not taken within 2 months the company will have right to dispose of you equipment at any price and recover the repair cost from the proceeds.<br/>
+        3. Defective parts are not preserved after replacement. Hence these will not be refunded. No labor will be charged for the repeat complaint within one month of the date of delivery. Naik Camera Emporium warranty will avoid if the unit is opened by any other person other than Naik Camera Emporium service center.<br/>
+        4. Reasonable care will be taken of the equipment received for repair. The Naik Camera Emporium is however, is not liable for any loss or damage arising from accident, fire, theft, riot or causes beyond control.<br/>
+        5. Inspection charges of Rs 250/- must be paid in advance and it is not refundable id repair estimate is not approved.<br/>
+        6. All legal matter are subject to Pune jurisdiction only.<br/>
+        7. We reserve the right to return the article to customer if -<br/>
+        a. The Article is found in tampered condition and / or <br/>
+        b. The required spare parts are not available from the manufacturers<br/>
+        </div>
+    </div>
+    <div class="row" style="margin-top:25px;">
         <div class="col-md-12">
-            <div>
-                <table class="table table-bordered">
-                    <tr>
-                        <td id="td-terms-contents" style="width:50%">"I/We" hereby certify that my/our registration certificate  under the Maharashtra Value Added Tax Act, 2002 is in force on the date on which the sale of the goods specified in this tax invoice is made by me/us and that the transaction of sale covered by this tax invoice has been effected by me/us and it shall be accounted for in the turnover of sales while filing of return  and the due tax, if any, payable on the sale has been paid or shall be paid</td>
-                        <td id="td-signature-contents" style="width:50%">
-                             <div style="text-align:center">(Authorised Signature)</div>
-                        </td>
-                    </tr>
-                </table>
-            </div>
+            <table class="table">
+                <tr>
+                    <td colspan="2" class="no-border"></td>
+                </tr>
+                <tr>
+                    <td class="text-center no-border">Customer Signature</td>
+                    <td class="text-center no-border">For Naik Camera Emporium</td>
+                </tr>
+            </table>
         </div>
     </div>
 </div>
@@ -237,5 +174,5 @@
 </div>
 <div class="modal-footer">
     <button class="btn btn-primary" ng-click="printPage();">Print</button>
-    <button class="btn btn-warning" ng-click="reloadSalesPage()">Close</button>
+    <button class="btn btn-warning" ng-click="reloadPage()">Close</button>
 </div>

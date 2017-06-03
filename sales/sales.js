@@ -13,6 +13,7 @@ angular.module('salesApp.sales', ['ngRoute' , 'smart-table', 'ui.bootstrap'])
       "address": "",
       "phone": ""
     };
+    $scope.receiptType = "TAX INVOICE";
     $scope.paymentInfo = {
       paymentType: "cash",
       paymentTypes: [{name: "Cash", value: "cash"},
@@ -45,6 +46,7 @@ angular.module('salesApp.sales', ['ngRoute' , 'smart-table', 'ui.bootstrap'])
     $scope.dateOptions = {};
     $scope.selectedProducts = [];
     $scope.salesResponseData = [];
+    $scope.printPage = Util.printPage;
     $scope.taxTypes = [
         {name: "VAT-1", value: "13.5"},
         {name: "VAT-2", value: "5.5"},
@@ -280,21 +282,6 @@ angular.module('salesApp.sales', ['ngRoute' , 'smart-table', 'ui.bootstrap'])
            }
         }
         return taxTypes;
-    }
-    
-    $scope.printPage = function(){
-        var printContents = document.getElementById("invoice-modal-full-123").innerHTML;
-        var popupWin = window.open("print.html", "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=500,left=500,width=400,height=400");    
-        if(popupWin){
-            popupWin.window.onload = function() {
-                popupWin.document.getElementById("masterContent").innerHTML = printContents;
-                popupWin.window.print();
-                popupWin.window.close();  
-                //$scope.reloadSalesPage();
-            };
-        }else{
-            alert("Plese disable your pop-up blocker.. for this domain");
-        }
     }
     
     $scope.reloadSalesPage = function(){
