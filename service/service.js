@@ -117,6 +117,13 @@ function($scope, $http, $modal, $log, customerSearch, productSearch, taxService,
             courierPhone: "",
             courierDocumentNo: ""
         },
+        courierOutwardInfo: {
+            isCourier: false,
+            courierName: "",
+            courierPhone: "",
+            courierDocumentNo: ""
+        },
+        pageMode:'SERVICE_DROP/SERVICE_PICKUP',
         serviceDate: Util.jsDateConversionFunction($scope.serviceDate)
     };
     
