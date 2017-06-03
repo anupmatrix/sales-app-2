@@ -26,7 +26,7 @@ angular.module('salesApp.report', ['ngRoute'])
 	}
 	$scope.init= function(){
 		updateMyLink();
-		$scope.selectedFilterOption =$scope.searchFilterOptions[0];
+		$scope.selectedFilterOption = $scope.searchFilterOptions[0];
 		$scope.errorInSearchOptions = "";
 		$scope.serviceDateFromModel="";
 		$scope.serviceDateTo="";
@@ -64,7 +64,7 @@ angular.module('salesApp.report', ['ngRoute'])
 				}
 				this.searchQueryObject["query"] = this.searchServiceByText;
 				this.searchQueryObject["type"] = 'TEXT';
-				this.searchQueryObject["col"] = this.selectedFilterOption;
+				this.searchQueryObject["col"] = $scope.selectedFilterOption.replace(/\s+/g, '');;
 			}else {
 				if ($scope.serviceDateTo === "" || $scope.serviceDateFromModel === "" ) {
 					this.serviceSearchCriteriaIncomplete = "Please enter the range date";
@@ -87,7 +87,9 @@ angular.module('salesApp.report', ['ngRoute'])
 	$scope.searchTextAsPerFilterOption = function(){
 
 		var b = this.populateQueryObject();
+		
 		if (b) {
+			$scope.actualServiceList = [];
 			$http({
 				//method: "POST",
 				method: "GET",
