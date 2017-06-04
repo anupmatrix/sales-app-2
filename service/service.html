@@ -115,11 +115,7 @@
       <div class="col-sm-12">
         <label for="current-product-serial-number">Serial Number</label>
             <input type="text" ng-model="curentProduct.sn" placeholder="Select Serial No" 
-            uib-typeahead="item as (item.name + ' ### ' + item.model + ' ### ' + item.sn + ' ### ' + item.price) for item in productList($viewValue, 'SN')"             
-            typeahead-loading="loadingLocations"  typeahead-no-results="noResults" 
             class="form-control" aria-autocomplete="list" 
-            aria-expanded="false" aria-owns="typeahead-81-4942"
-            typeahead-on-select="selectProductFrmList($item, 'SN')"
             typeahead-min-length="3" ng-enter="addProduct();setFocusTo('currentProductName')" 
             id="currentProductSerialNumber"
             name="currentProductSerialNumber"
@@ -252,15 +248,15 @@
                     <div class="form-group">
                         <label class="control-label col-sm-4" for="cust-name">How it is received:</label>
                         <div class="col-sm-4">
-                            <select ng-model="productReceivedMode.receivedType" class="form-control" id="productReceivedType">
-                                <option ng-repeat="receivedType in productReceivedMode.receivedModes" value="{{receivedType.value}}">
-                                    {{receivedType.name}}
+                            <select ng-model="productLogisticMode.logisticType" class="form-control" id="productReceivedType">
+                                <option ng-repeat="logisticType in productLogisticMode.receivedModes" value="{{logisticType.value}}">
+                                    {{logisticType.name}}
                                 </option>
                             </select>                  
                         </div>
                     </div>
                 </div>       
-                <div ng-if="productReceivedMode.receivedType == 'courier'">
+                <div ng-if="productLogisticMode.logisticType == 'courier'">
                     <div class="row">
                             <div class="col-sm-12">
                                 <div class="form-group">

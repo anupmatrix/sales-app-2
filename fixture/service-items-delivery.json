@@ -1,10 +1,5 @@
 {
-  "selectedProductList": [
-    11,
-    22,
-    33,
-    44
-  ],
+  "selectedProductList": [1,2],
   "problemLists": [
     "Dust In View Finder",
     "Scratches on Focusing Screen",

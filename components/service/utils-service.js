@@ -65,6 +65,9 @@ angular.module('salesApp.services.Util', ['ui.bootstrap'])
             case "service-drop":
                 printPageTemplate = 'components/modal/serviceDrop.html';
                 break;
+            case "service-deliver":
+                printPageTemplate = 'components/modal/serviceDelivery.html';
+                break;
             case "sales-complete":
                 printPageTemplate = 'components/modal/salesComplete.html';
                 break;

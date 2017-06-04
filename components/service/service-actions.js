@@ -16,5 +16,13 @@ angular.module('salesApp.services.repairService', [])
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
        });
   };
+  this.deliverProduct = function (requestParams) {
+       return $http({
+          method: 'POST',
+          url: 'fixture/items-delivery.json',
+          data: requestParams,
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+       });
+  };
 }   
 ])

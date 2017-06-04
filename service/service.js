@@ -1,8 +1,8 @@
 'use strict';
 angular.module('salesApp.service', ['ngRoute' , 'smart-table', 'ui.bootstrap'])
 .controller('ServiceCtrl', ['$scope', '$http', '$uibModal', '$log' , 'customerSearch', 'productSearch' , 
-                            'taxService', 'Util', 'Validation', 'customerService', 'pageMode', '$routeParams',
-function($scope, $http, $modal, $log, customerSearch, productSearch, taxService, Util, Validation, customerService, pageMode, $routeParams) {
+                            'taxService', 'Util', 'Validation', 'customerService', 'pageMode', '$routeParams', '$timeout', 'customerSearchFactory' ,
+function($scope, $http, $modal, $log, customerSearch, productSearch, taxService, Util, Validation, customerService, pageMode, $routeParams, $timeout, customerSearchFactory) {
     console.log(pageMode);
     $scope.receiptType = "INVOICE";    
     $scope.pageMode = pageMode;    
@@ -13,9 +13,11 @@ function($scope, $http, $modal, $log, customerSearch, productSearch, taxService,
     $scope.isValidProductToAdd = false;
     $scope.serviceResponse = [];
     $scope.serviceDate = new Date();
+    $scope.serviceOrderDate = new Date();
+    
     $scope.printPage = Util.printPage;
     $scope.serviceRequest = {
-        selectedProductList:[11,22,33,44],
+        selectedProductList:[],
         problemLists:[],
         accessoryList:[],
         shopUserComment:'',
@@ -46,9 +48,10 @@ function($scope, $http, $modal, $log, customerSearch, productSearch, taxService,
         serviceDate: ""
     };
     
-    $scope.initServiceDrop = function(){
+    $scope.initServiceDelivery = function(){
         //setDummyProduct();
         //console.log($routeParams);
+        $scope.receiptType = "TAX INVOICE";    
         mapHashChangeToMenuUpdate();
         var requestParams = {};
         if($routeParams.serviceId !==undefined){
@@ -63,22 +66,64 @@ function($scope, $http, $modal, $log, customerSearch, productSearch, taxService,
         if(requestParams.serviceId){
             customerService.fetchServiceItemsFroDelivery(requestParams).
             then(function(response){
-                $scope.serviceRequest = response.data;
-                $scope.serviceRequest.advancePayment = getAdvancePaymentDoneForDrop();
-                $scope.serviceRequest.paidDuringPickupPayment = getPaymentDoneForPickup();
-                $scope.serviceRequest.totalPaymentForPickup = $scope.serviceRequest.advancePayment + $scope.serviceRequest.paidDuringPickupPayment;
-                
-                console.log(response);
+                var data = angular.copy(response.data);
+                    $timeout(function () {
+                        angular.merge($scope.serviceRequest, data);
+                        $scope.serviceRequest.advancePayment = getAdvancePaymentDoneForDrop(data.paymentInfo);
+                    });
             });
         }
         
     };
+    var resetOtherPaymentTypes = function(paymentInfo){
+        if(paymentInfo.paymentType == 'cash'){
+            paymentInfo.card = {amount:0, bankName:'', cardNumber:'', expDate:'', cardNetwork:'', cardBank:'' };
+            paymentInfo.cheq = {amount:0, bankName:'', cheqNo:'', cheqDate:'' } ;
+        }    
+        if(paymentInfo.paymentType == 'card'){
+            paymentInfo.cash = {amount:0};
+            paymentInfo.cheq = {amount:0, bankName:'', cheqNo:'', cheqDate:'' } ;
+        }    
+        if(paymentInfo.paymentType == 'cheq'){
+            paymentInfo.cash = {amount:0};
+            paymentInfo.card = {amount:0, bankName:'', cardNumber:'', expDate:'', cardNetwork:'', cardBank:'' };
+        }    
+    }
+    $scope.performServiceDelivery = function(){
+        resetOtherPaymentTypes($scope.paymentInfo)
+        $scope.serviceRequest.paymentInfo = angular.copy($scope.paymentInfo);
+        var postParam = angular.copy($scope.serviceRequest);
+
+        customerService.deliverProduct(postParam).then(function(response){
+            $scope.deliverProductResponse = response.data;
+            Util.openPrintPopUp($scope, 'service-drop');
+        });
+    }
     
-    var getAdvancePaymentDoneForDrop = function(){
+    
+    $scope.calculateReaminingPayment = function(){
+        var totalPayment = Util.toDecimalPrecision($scope.paymentInfo.totalCharges);
+        var advancePayment = Util.toDecimalPrecision($scope.serviceRequest.advancePayment);
+        var remainingAmmount = '';
+        if(!isNaN(totalPayment)){
+            if(remainingAmmount = totalPayment - advancePayment);
+        }
+        $scope.paymentInfo.remainingAmmount = remainingAmmount;
+        
+        if(remainingAmmount > 0){
+            $scope.paymentInfo.cash.amount = remainingAmmount;
+            $scope.paymentInfo.card.amount = remainingAmmount;
+            $scope.paymentInfo.cheq.amount = remainingAmmount;
+        }
+        
+        //console.log(remainingAmmount);
+    }
+    
+    var getAdvancePaymentDoneForDrop = function(data){
         var advancePaymentMade = 0;
-            advancePaymentMade += Util.toDecimalPrecision($scope.serviceRequest.paymentInfo.cash.amount || 0);
-            advancePaymentMade += Util.toDecimalPrecision($scope.serviceRequest.paymentInfo.card.amount || 0);
-            advancePaymentMade += Util.toDecimalPrecision($scope.serviceRequest.paymentInfo.cheq.amount || 0);
+            advancePaymentMade += Util.toDecimalPrecision(data.cash.amount || 0);
+            advancePaymentMade += Util.toDecimalPrecision(data.card.amount || 0);
+            advancePaymentMade += Util.toDecimalPrecision(data.cheq.amount || 0);
         return advancePaymentMade;
     }
     var getPaymentDoneForPickup = function(){
@@ -89,8 +134,8 @@ function($scope, $http, $modal, $log, customerSearch, productSearch, taxService,
         return advancePaymentMade;
     }
     
-    $scope.productReceivedMode = {
-           receivedType:'manual', 
+    $scope.productLogisticMode = {
+           logisticType:'manual', 
            receivedModes:[{name: "Courier", value: "courier"}, {name: "Manual", value: "manual"}]
     };
 
@@ -118,6 +163,12 @@ function($scope, $http, $modal, $log, customerSearch, productSearch, taxService,
             dummyProduct.id=44        
             $scope.serviceRequest.productInfo.push(angular.copy(dummyProduct));                       
     };
+    $scope.selectCustomerFrmList = function(value){
+        $scope.serviceRequest.customerInfo.name = value.name || '';
+        $scope.serviceRequest.customerInfo.id = value.id || null;
+        $scope.serviceRequest.customerInfo.phone = value.phone || '';
+        $scope.serviceRequest.customerInfo.address = value.address || '';
+    }
     
     var setProductContainerToPristine = function(){
         $scope.serviveForm.currentProductName.$setUntouched();
@@ -224,7 +275,7 @@ function($scope, $http, $modal, $log, customerSearch, productSearch, taxService,
     
     $scope.isValidNewAccessory = function(){
         var isValid = false;
-        if($scope.newAccessory.trim() !== "" && $scope.newAccessory.trim().length >= 3){
+        if(typeof $scope.newAccessory ==  'string' && $scope.newAccessory.trim() !== "" && $scope.newAccessory.trim().length >= 3){
             isValid = true;
         }
         return isValid;
@@ -255,21 +306,35 @@ function($scope, $http, $modal, $log, customerSearch, productSearch, taxService,
     };    
         
     $scope.customerList = function(val) {
-        var custPromise = customerSearch.search(val);
-            custPromise.then(function(response){
-            return response.data.customerServiceResponseList.map(function(item){
-                return item;
-            });
+        //return $http.get('http://10.20.116.112:8080/vogellaRestImpl/rest/customer/serach-customer',{
+        return $http.get('fixture/customer.json?text='+(Math.random()),{
+          params: {
+            text: val
+          }
+        }).then(function(response){
+          return response.data.customerServiceResponseList.map(function(item){
+             return item;
+          });
         });
     };
    
     $scope.productList = function(val, type) {
-        var productPromise = productSearch.search(val);
-        productPromise.then(function(response){
+        //return $http.get('http://10.20.116.112:8080/vogellaRestImpl/rest/product/search-product',{
+        return $http.get('fixture/item-list.json?v='+Math.random(), {
+          params: {
+            text: val,
+            type: type
+          }
+        }).then(function(response){
              return response.data.singleProductModelList.map(function(item){
                 return item;
             });
         });
+    };
+    $scope.selectProductFrmList = function(value, type){
+        $scope.curentProduct.id = value.id || "";
+        $scope.curentProduct.name = value.name || '';
+        $scope.curentProduct.model = value.model || '';
     };
     
     $scope.isValidProductInfoforAdd = function(){
@@ -282,7 +347,7 @@ function($scope, $http, $modal, $log, customerSearch, productSearch, taxService,
     
     $scope.isValidCustomerAdd = function(){
         var isValidCustomerForm = false;
-        if(!$scope[$scope.formName].customerName.$invalid){
+        if(!$scope.serviveForm.customerName.$invalid){
             isValidCustomerForm = true;
         }
         return isValidCustomerForm;
@@ -303,8 +368,6 @@ function($scope, $http, $modal, $log, customerSearch, productSearch, taxService,
             $scope.serviceResponse = response.data;
             Util.openPrintPopUp($scope, 'service-drop');
         });
-        
-        console.log(JSON.stringify($scope.serviceRequest))
     };
     
     $scope.reloadPage = function(){
