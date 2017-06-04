@@ -9,10 +9,13 @@
 <div class="container invoice-modal-full" id="invoice-modal-full-123">
     <div class="row">
         <div class="col-xs-12">
+        
                     <span class="in-table-data"> Service Date :</span> {{selectedItemForUpdate.serviceDate}} 
 				        <span class="in-table-data"> Customer Name:</span> {{selectedItemForUpdate.customerInfo.name}} 
-				        <span class="in-table-data"> Customer Contact: </span> {{selectedItemForUpdate.customerInfo.phone}} <br/> 
-				        <span class="in-table-data"> Technician Comments:</span> <textarea ng-model="string" ></textarea>
+				        <span class="in-table-data"> Customer Contact: </span> {{selectedItemForUpdate.customerInfo.phone}} <br/>
+				        <hr> 
+				        <span class="in-table-data" > Technician Comments:</span> 
+				        <textarea  id ="techCommentsIDModal" class="form-control" rows="5" > {{selectedItemForUpdate.commentsInfo.tech}}</textarea>
 				
         </div>
     </div>     

@@ -81,13 +81,15 @@ angular.module('salesApp.tech', ['ngRoute' , 'smart-table', 'ui.bootstrap'])
     }
 
     $scope.statusIsUpdated = function(){
-      var domList = document.getElementsByClassName("my-product-info")  ;
+      var domList = document.getElementsByClassName("my-product-info")
+      var techCommentDom = document.getElementById("techCommentsIDModal")  ;
       var updatedStatusList=[];
       for(var i=0;i<domList.length;i++){
         updatedStatusList.push({
             'serviceNumber':$scope.selectedItemForUpdate.serviceNumber,
             'itemId':domList[i].getAttribute('my-data'),
-            'status':$scope.backendItemStatusMap[(domList[i].value).toUpperCase()]
+            'status':$scope.backendItemStatusMap[(domList[i].value).toUpperCase()],
+            "techComment":techCommentDom.value
         });
       }
 
