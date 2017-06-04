@@ -49,6 +49,7 @@ function($scope, $http, $modal, $log, customerSearch, productSearch, taxService,
     $scope.initServiceDrop = function(){
         //setDummyProduct();
         //console.log($routeParams);
+        mapHashChangeToMenuUpdate();
         var requestParams = {};
         if($routeParams.serviceId !==undefined){
             requestParams.serviceId = $routeParams.serviceId; 

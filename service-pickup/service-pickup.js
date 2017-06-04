@@ -87,7 +87,7 @@ angular.module('salesApp.report', ['ngRoute'])
 		
 		$scope.selectedServiceOrderId = row.serviceNumber
 		$scope.selectedServiceOrderDetails = row;
-		$scope.$apply( $location.path( '/service-pickup-final/'+$scope.selectedServiceOrderId+'/'+$scope.selectedProductList.itemsToDeliver.toString() ) );
+		$location.path( '/service-pickup-final/'+$scope.selectedServiceOrderId+'/'+$scope.selectedProductList.itemsToDeliver.toString() );
 		//$scope.selectedProductList.itemsToDeliver - items selected
 
 		
