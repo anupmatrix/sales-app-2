@@ -10,5 +10,5 @@ angular.module('salesApp.completed', ['ngRoute'])
 }])
 
 .controller('CompletedCtrl', [function() {
-alert("COMPLETED")
+		
 }]);

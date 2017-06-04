@@ -71,6 +71,9 @@ angular.module('salesApp.services.Util', ['ui.bootstrap'])
             case "service-complete":
                 printPageTemplate = 'components/modal/serviceDelivery.html';
                 break;
+            case "tech-update":
+                printPageTemplate = 'components/modal/techUpdate.html';
+                break;    
             default:
                 printPageTemplate = 'components/modal/salesComplete.html';
         }

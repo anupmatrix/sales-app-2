@@ -8,11 +8,11 @@ angular.module('salesApp', [
   'salesApp.version',
   'salesApp.date',
   'salesApp.modal',
+  'salesApp.services.Util',
   'ui.bootstrap',
   'smart-table'
 ]).
 config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
-	alert("HELLO");
   $locationProvider.hashPrefix('!');
   $routeProvider.otherwise({redirectTo: '/myjobs'});
 }]);

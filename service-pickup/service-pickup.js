@@ -125,7 +125,7 @@ angular.module('salesApp.report', ['ngRoute'])
 				}
 				this.searchQueryObject["query"] = $scope.searchServiceByText;
 				this.searchQueryObject["type"] = 'TEXT';
-				this.searchQueryObject["col"] = $scope.selectedFilterOption.replace(/\s+/g, '');;
+				this.searchQueryObject["col"] = $scope.selectedFilterOption.replace(/\s+/g, '');
 			}else {
 				if ($scope.serviceDateTo === "" || $scope.serviceDateFromModel === "" ) {
 					this.serviceSearchCriteriaIncomplete = "Please enter the range date";

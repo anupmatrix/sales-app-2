@@ -61,7 +61,73 @@
           "serviceStatus":"IP",
           "taxValue": 5.5,
           "taxRate": 5.5
+        },
+        {
+          "id":213334323,
+          "name": "XXX",
+          "model": "model",
+          "sn": "XXX-sn",
+          
+          "shopUserComment": "XXX-shopUserComment",
+          "customerComment": "XXX-customerComment",
+          "tentative_quoted_cost": "2000",
+          "tentative_service_completion_date": "2017-05-25 04:38:25",
+          "service_order_date": "2017-05-25 04:38:25",
+          "taxType": "VAT-2",
+          "serviceStatus":"IP",
+          "taxValue": 5.5,
+          "taxRate": 5.5
+        },
+        {
+          "id":21377733,
+          "name": "XXX",
+          "model": "model",
+          "sn": "XXX-sn",
+          
+          "shopUserComment": "XXX-shopUserComment",
+          "customerComment": "XXX-customerComment",
+          "tentative_quoted_cost": "2000",
+          "tentative_service_completion_date": "2017-05-25 04:38:25",
+          "service_order_date": "2017-05-25 04:38:25",
+          "taxType": "VAT-2",
+          "serviceStatus":"IP",
+          "taxValue": 5.5,
+          "taxRate": 5.5
+        },
+        {
+          "id":21344533,
+          "name": "XXX",
+          "model": "model",
+          "sn": "XXX-sn",
+          
+          "shopUserComment": "XXX-shopUserComment",
+          "customerComment": "XXX-customerComment",
+          "tentative_quoted_cost": "2000",
+          "tentative_service_completion_date": "2017-05-25 04:38:25",
+          "service_order_date": "2017-05-25 04:38:25",
+          "taxType": "VAT-2",
+          "serviceStatus":"IP",
+          "taxValue": 5.5,
+          "taxRate": 5.5
+        },
+        {
+          "id":2167567333,
+          "name": "XXX",
+          "model": "model",
+          "sn": "XXX-sn",
+          
+          "shopUserComment": "XXX-shopUserComment",
+          "customerComment": "XXX-customerComment",
+          "tentative_quoted_cost": "2000",
+          "tentative_service_completion_date": "2017-05-25 04:38:25",
+          "service_order_date": "2017-05-25 04:38:25",
+          "taxType": "VAT-2",
+          "serviceStatus":"IP",
+          "taxValue": 5.5,
+          "taxRate": 5.5
         }
+
+
 
       ],
       "accessoryList": "XXX-accessoryList,accessoryList",
