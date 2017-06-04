@@ -30,12 +30,12 @@ config(['$locationProvider', '$routeProvider', function($locationProvider, $rout
         controller: 'ServiceCtrl',
         resolve: {pageMode: function() { return "SERVICE_DROP"; }}        
     })
-    .when('/service_pickup/:serviceId/:selectedItems', {
+    .when('/service-pickup-final/:serviceId/:selectedItems', {
         templateUrl: 'service/servicePickup.html',
         controller: 'ServiceCtrl',
         resolve: {pageMode: function() { return "SERVICE_PICKUP"; }}        
     })
-    .when('/service_pickup/:serviceId', {
+    .when('/service-pickup-final/:serviceId', {
         templateUrl: 'service/servicePickup.html',
         controller: 'ServiceCtrl',
         resolve: {pageMode: function() { return "SERVICE_PICKUP"; }}        

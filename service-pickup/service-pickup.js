@@ -5,14 +5,20 @@ angular.module('salesApp.report', ['ngRoute'])
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/service-pickup', {
     templateUrl: 'service-pickup/service-pickup.html',
-    controller: 'ReportCtrl'
+    controller: 'ServicePickUpController'
   });
 }])
 
-.controller('ReportCtrl', ['$scope','$http', 'Util', function($scope,$http,Util) {
+.controller('ServicePickUpController', ['$scope','$http', 'Util','$location', function($scope,$http,Util,$location) {
 	$scope.searchFilterOptions = [ "SERVICE ID","SERIAL NUMBER", "PRODUCT NAME","CUSTOMER PHONE", "CUSTOMER NAME", "ALL"];
 	$scope.searchFilterByOptions=["SEARCH BY TEXT", "SEARCH BY DATE"];
+	$scope.selectedFilterOption = $scope.searchFilterOptions[0];
 	$scope.searchQueryObject ={};
+	$scope.searchServiceByText ="";
+	$scope.selectedProductList = {
+		"itemsToDeliver" :[
+		]
+	}
 	$scope.serviceStatusMapping ={
 		"IP":"In Progress",
 		"TNS":"Technician Not Started",
@@ -34,8 +40,63 @@ angular.module('salesApp.report', ['ngRoute'])
 		$scope.serviceSearchCriteriaIncomplete = "";
 		$scope.searchServiceByText ="";
 		$scope.actualServiceList =[];
+		$scope.selectedServiceOrderId ="";
+		$scope.itemSelectionError ="";
+		$scope.selectedServiceOrderId  ="";
+
 
 	}
+
+	$scope.toDisableDeliverButton = function(row){
+		if ($scope.selectedServiceOrderId === ""){
+			return false;
+		}
+
+
+		if ($scope.selectedServiceOrderId !== ""  && row.serviceNumber === $scope.selectedServiceOrderId){
+			return false;			
+		}
+		return true;
+		//console.log($scope.selectedProductList.itemsToDeliver);
+
+	}
+
+	$scope.someOrderIsSelectedForDelivery = function(){
+
+			if ($scope.selectedServiceOrderId !== ""){
+				return true;
+			}
+			return false;
+	}
+
+	$scope.moveToCustomerDelivery = function(row){
+		$scope.itemSelectionError ="";
+		
+		console.log($scope.selectedProductList.itemsToDeliver);
+		var someItemSelected = false;
+		for (var i=0;i < row.productInfo.length;i++ ) {
+			if ($scope.selectedProductList.itemsToDeliver.indexOf(row.productInfo[i].id) !== -1){
+				someItemSelected = true;
+				break;
+			}
+		}
+		if (!someItemSelected) {
+			$scope.itemSelectionError =" Please Select Item To Deliver";
+			return false;
+		}
+		
+		$scope.selectedServiceOrderId = row.serviceNumber
+		$scope.selectedServiceOrderDetails = row;
+		$scope.$apply( $location.path( '/service-pickup-final/'+$scope.selectedServiceOrderId+'/'+$scope.selectedProductList.itemsToDeliver.toString() ) );
+		//$scope.selectedProductList.itemsToDeliver - items selected
+
+		
+	}
+
+	$scope.filterTextOptionChanged = function(x){
+		console.log($scope.selectedFilterOption)	
+	}
+
 
 	$scope.resetInput = function() {
 		$scope.searchQueryObject ={
@@ -62,7 +123,7 @@ angular.module('salesApp.report', ['ngRoute'])
 					this.serviceSearchCriteriaIncomplete = "Please enter the search text";
 				 	return false;
 				}
-				this.searchQueryObject["query"] = this.searchServiceByText;
+				this.searchQueryObject["query"] = $scope.searchServiceByText;
 				this.searchQueryObject["type"] = 'TEXT';
 				this.searchQueryObject["col"] = $scope.selectedFilterOption.replace(/\s+/g, '');;
 			}else {
