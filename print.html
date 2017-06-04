@@ -15,6 +15,16 @@
     <link rel="stylesheet" href="app.css">
     <script src="Vendor/html5-boilerplate/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
     <style>
+    
+    @media print{
+        .no-border {
+            border:0px !important;
+        }
+        .no-border tr, .no-border td, .no-border th{
+            border:none !important;
+        }
+    
+    }
         .modal-lg{
             width:95%;
         }
@@ -33,7 +43,7 @@
         .no-border {
             border:0px !important;
         }
-        .no-border tr, .no-border td{
+        .no-border tr, .no-border td, .no-border th{
             border:none !important;
         }
         .table-bordered>thead>tr>th, .table-bordered>thead>tr>td{

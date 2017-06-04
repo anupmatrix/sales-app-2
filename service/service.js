@@ -1,32 +1,88 @@
 'use strict';
-
 angular.module('salesApp.service', ['ngRoute' , 'smart-table', 'ui.bootstrap'])
-.config(['$routeProvider', function($routeProvider) {
-  $routeProvider.when('/service', {
-    templateUrl: 'service/service.html',
-    controller: 'ServiceCtrl'
-  });
-}])
-
 .controller('ServiceCtrl', ['$scope', '$http', '$uibModal', '$log' , 'customerSearch', 'productSearch' , 
-                            'taxService', 'Util', 'Validation', 'customerService',
-function($scope, $http, $modal, $log, customerSearch, productSearch, taxService, Util, Validation, customerService) {
+                            'taxService', 'Util', 'Validation', 'customerService', 'pageMode', '$routeParams',
+function($scope, $http, $modal, $log, customerSearch, productSearch, taxService, Util, Validation, customerService, pageMode, $routeParams) {
+    console.log(pageMode);
     $scope.receiptType = "INVOICE";    
+    $scope.pageMode = pageMode;    
     $scope.taxTypes = taxService.getTaxListService();
     $scope.problemLists = ["Dust In View Finder", "Scratches on Focusing Screen", "Salt Water Damage", "Water Damage", "Fungus in Binocular", "Scratch on Body"];
     $scope.accessoryList= ["AC Cord", "Filter UV", "Memory Card", "USB Cable", "Charger", "Battery", "Body Cap", "Lens Cap Back", "Lens Cap front"];
     $scope.newProblem = "";
-    $scope.newAccessory = "";
-    $scope.shopUserComment = ""
-    $scope.customerComment = "";
-    $scope.tentative_quoted_cost = 0.00;
-    $scope.formName = "serviveForm";
-    $scope.serviceOrderDate = new Date();
-    $scope.tentativeServiceCompletionDate = "";
     $scope.isValidProductToAdd = false;
     $scope.serviceResponse = [];
     $scope.serviceDate = new Date();
     $scope.printPage = Util.printPage;
+    $scope.serviceRequest = {
+        selectedProductList:[11,22,33,44],
+        problemLists:[],
+        accessoryList:[],
+        shopUserComment:'',
+        customerComment:'',
+        tentative_quoted_cost:0.00,
+        customerInfo:{
+          id: "",
+          name: "",
+          address: "",
+          phone: ""
+        },
+        productInfo:[],
+        service_order_date:'',
+        tentative_service_completion_date:'',
+        courierInfo: {
+            isCourier: false,
+            courierName: "",
+            courierPhone: "",
+            courierDocumentNo: ""
+        },
+        courierOutwardInfo: {
+            isCourier: false,
+            courierName: "",
+            courierPhone: "",
+            courierDocumentNo: ""
+        },
+        pageMode:pageMode,
+        serviceDate: ""
+    };
+    
+    $scope.initServiceDrop = function(){
+        //setDummyProduct();
+        //console.log($routeParams);
+        var requestParams = {};
+        if($routeParams.serviceId !==undefined){
+            requestParams.serviceId = $routeParams.serviceId; 
+        }
+        if($routeParams.selectedItems !==undefined){
+            var selectedItemsArr = $routeParams.selectedItems.split(',');
+            if(selectedItemsArr.length > 0){
+                requestParams.serviceItems = selectedItemsArr;
+            }
+        }
+        if(requestParams.serviceId){
+            customerService.fetchServiceItemsFroDelivery(requestParams).
+            then(function(response){
+                $scope.serviceRequest = response.data;
+                $scope.serviceRequest.advancePayment = getAdvancePaymentFor();
+                console.log(response);
+            });
+        }
+        
+    };
+    
+    var getAdvancePaymentFor = function(){
+        var advancePaymentMade = 0;
+        if($scope.serviceRequest.paymentType == "card"){
+            advancePaymentMade = $scope.serviceRequest.paymentInfo.card.amount || 0;
+        }
+        if($scope.serviceRequest.paymentType == "cash"){
+            advancePaymentMade = $scope.serviceRequest.paymentInfo.card.amount || 0;
+        }
+        if($scope.serviceRequest.paymentType == "cheq"){
+            advancePaymentMade = $scope.serviceRequest.paymentInfo.cheq.amount || 0;
+        }
+        return Util.toDecimalPrecision(advancePaymentMade);
+    }
     
     $scope.productReceivedMode = {
            receivedType:'manual', 
@@ -40,6 +96,22 @@ function($scope, $http, $modal, $log, customerSearch, productSearch, taxService,
                                 tentative_quoted_cost: "", totalPrice:0, taxType:0, taxValue:0, 
                                 taxAmmount:0, grandTotal:0 };
         return $scope.curentProduct;
+    };
+    
+    var setDummyProduct = function(){
+        var dummyProduct = {tentative_service_completion_date:"11",
+                                service_order_date:Util.jsDateConversionFunction($scope.serviceOrderDate), 
+                                name: "11",  model: "22",  sn: "33", 
+                                tentative_quoted_cost: "33", totalPrice:0, taxType:0, taxValue:0, 
+                                taxAmmount:0, grandTotal:0 };
+            dummyProduct.id=11    
+            $scope.serviceRequest.productInfo.push(angular.copy(dummyProduct));  
+            dummyProduct.id=22    
+            $scope.serviceRequest.productInfo.push(angular.copy(dummyProduct)); 
+            dummyProduct.id=33            
+            $scope.serviceRequest.productInfo.push(angular.copy(dummyProduct));      
+            dummyProduct.id=44        
+            $scope.serviceRequest.productInfo.push(angular.copy(dummyProduct));                       
     };
     
     var setProductContainerToPristine = function(){
@@ -94,37 +166,6 @@ function($scope, $http, $modal, $log, customerSearch, productSearch, taxService,
         cheqNo:'',
         cheqDate:''
       }
-    };
-    
-    $scope.serviceRequest = {
-        problemLists:[],
-        accessoryList:[],
-        shopUserComment:'',
-        customerComment:'',
-        tentative_quoted_cost:0.00,
-        customerInfo:{
-          id: "",
-          name: "",
-          address: "",
-          phone: ""
-        },
-        productInfo:[],
-        service_order_date:Util.jsDateConversionFunction($scope.serviceOrderDate),
-        tentative_service_completion_date:Util.jsDateConversionFunction($scope.serviceOrderDate),
-        courierInfo: {
-            isCourier: false,
-            courierName: "",
-            courierPhone: "",
-            courierDocumentNo: ""
-        },
-        courierOutwardInfo: {
-            isCourier: false,
-            courierName: "",
-            courierPhone: "",
-            courierDocumentNo: ""
-        },
-        pageMode:'SERVICE_DROP/SERVICE_PICKUP',
-        serviceDate: Util.jsDateConversionFunction($scope.serviceDate)
     };
     
     $scope.removeRow = function removeRow(row) {
@@ -246,15 +287,21 @@ function($scope, $http, $modal, $log, customerSearch, productSearch, taxService,
         return JSON.stringify(json);
     }
     
-    $scope.performSalesOperation = function(){
+    $scope.performServiceDrop = function(){
         console.log($scope.serviceRequest);
         $scope.serviceRequest.serviceDate = Util.jsDateConversionFunction($scope.serviceDate);
+        $scope.serviceRequest.service_order_date = Util.jsDateConversionFunction($scope.serviceOrderDate);
+        $scope.serviceRequest.tentative_service_completion_date = Util.jsDateConversionFunction($scope.serviceOrderDate);
         $scope.serviceRequest.paymentInfo = $scope.paymentInfo;
+
         customerService.dropProduct().then(function(response){
             $scope.serviceResponse = response.data;
             Util.openPrintPopUp($scope, 'service-drop');
         });
+        
+        console.log(JSON.stringify($scope.serviceRequest))
     };
+    
     $scope.reloadPage = function(){
         window.location.reload();
     }

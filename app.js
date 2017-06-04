@@ -24,5 +24,26 @@ angular.module('salesApp', [
 ]).
 config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
   $locationProvider.hashPrefix('!');
-  $routeProvider.otherwise({redirectTo: '/sales'});
+  $routeProvider
+  .when('/service', {
+        templateUrl: 'service/service.html',
+        controller: 'ServiceCtrl',
+        resolve: {pageMode: function() { return "SERVICE_DROP"; }}        
+    })
+    .when('/service_pickup/:serviceId/:selectedItems', {
+        templateUrl: 'service/servicePickup.html',
+        controller: 'ServiceCtrl',
+        resolve: {pageMode: function() { return "SERVICE_PICKUP"; }}        
+    })
+    .when('/service_pickup/:serviceId', {
+        templateUrl: 'service/servicePickup.html',
+        controller: 'ServiceCtrl',
+        resolve: {pageMode: function() { return "SERVICE_PICKUP"; }}        
+    }).
+  
+  when('/sales', {
+    templateUrl: 'sales/sales.html',
+    controller: 'SalesCtrl'
+  }).
+  otherwise({redirectTo: '/sales'});
 }]);

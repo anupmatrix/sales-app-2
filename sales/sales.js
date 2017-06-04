@@ -1,11 +1,5 @@
 'use strict';
 angular.module('salesApp.sales', ['ngRoute' , 'smart-table', 'ui.bootstrap'])
-.config(['$routeProvider', function($routeProvider) {
-  $routeProvider.when('/sales', {
-    templateUrl: 'sales/sales.html',
-    controller: 'SalesCtrl'
-  });
-}])
 .controller('SalesCtrl', ['$scope', '$http', '$uibModal', '$log', 'taxService', 'Util', function($scope, $http, $modal, $log, taxService, Util) {
     $scope.customerDetails = {
       "id": "",

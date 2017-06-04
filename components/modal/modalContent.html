@@ -101,14 +101,14 @@
                     <td class="col-xs-2">&nbsp; CHEQUE</td>
                     <td class="col-xs-4"></td>
                     <td class="col-xs-2"><span class="pull-right">Cheque No</span></td>
-                    <td class="col-xs-2"><span class="pull-left">:</span>&nbsp; <span>{{paymentInfo.cheq.chequeNo}}</span></td>
+                    <td class="col-xs-2"><span class="pull-left">:</span>&nbsp; <span>{{paymentInfo.cheq.cheqNo}}</span></td>
                 </tr>
                 <tr>
                     <td class="col-xs-2"><span class="pull-left">Bank</span> <span class="pull-right">:</span></td>
-                    <td class="col-xs-2">&nbsp; SBI</td>
+                    <td class="col-xs-2">&nbsp; {{paymentInfo.cheq.bankName}}</td>
                     <td class="col-xs-4"></td>
                     <td class="col-xs-2"><span class="pull-right">Cheque Date.</span></td>
-                    <td class="col-xs-2"><span class="pull-left">:</span>&nbsp; <span>{{paymentInfo.cheq.chequeDate}}</span></td>
+                    <td class="col-xs-2"><span class="pull-left">:</span>&nbsp; <span>{{paymentInfo.cheq.cheqDate}}</span></td>
                 </tr>
             </table>
             <table class="table table-condensed no-border invoice-margin" ng-if="paymentInfo.paymentType == 'card'">
