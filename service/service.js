@@ -63,25 +63,29 @@ function($scope, $http, $modal, $log, customerSearch, productSearch, taxService,
             customerService.fetchServiceItemsFroDelivery(requestParams).
             then(function(response){
                 $scope.serviceRequest = response.data;
-                $scope.serviceRequest.advancePayment = getAdvancePaymentFor();
+                $scope.serviceRequest.advancePayment = getAdvancePaymentDoneForDrop();
+                $scope.serviceRequest.paidDuringPickupPayment = getPaymentDoneForPickup();
+                $scope.serviceRequest.totalPaymentForPickup = $scope.serviceRequest.advancePayment + $scope.serviceRequest.paidDuringPickupPayment;
+                
                 console.log(response);
             });
         }
         
     };
     
-    var getAdvancePaymentFor = function(){
+    var getAdvancePaymentDoneForDrop = function(){
         var advancePaymentMade = 0;
-        if($scope.serviceRequest.paymentType == "card"){
-            advancePaymentMade = $scope.serviceRequest.paymentInfo.card.amount || 0;
-        }
-        if($scope.serviceRequest.paymentType == "cash"){
-            advancePaymentMade = $scope.serviceRequest.paymentInfo.card.amount || 0;
-        }
-        if($scope.serviceRequest.paymentType == "cheq"){
-            advancePaymentMade = $scope.serviceRequest.paymentInfo.cheq.amount || 0;
-        }
-        return Util.toDecimalPrecision(advancePaymentMade);
+            advancePaymentMade += Util.toDecimalPrecision($scope.serviceRequest.paymentInfo.cash.amount || 0);
+            advancePaymentMade += Util.toDecimalPrecision($scope.serviceRequest.paymentInfo.card.amount || 0);
+            advancePaymentMade += Util.toDecimalPrecision($scope.serviceRequest.paymentInfo.cheq.amount || 0);
+        return advancePaymentMade;
+    }
+    var getPaymentDoneForPickup = function(){
+        var advancePaymentMade = 0;
+            advancePaymentMade += Util.toDecimalPrecision($scope.serviceRequest.paymentInfo.cash.amount || 0);
+            advancePaymentMade += Util.toDecimalPrecision($scope.serviceRequest.paymentInfo.card.amount || 0);
+            advancePaymentMade += Util.toDecimalPrecision($scope.serviceRequest.paymentInfo.cheq.amount || 0);
+        return advancePaymentMade;
     }
     
     $scope.productReceivedMode = {

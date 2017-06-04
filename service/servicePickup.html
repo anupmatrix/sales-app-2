@@ -1,0 +1,276 @@
+<form class="form-horizontal" name="serviveForm" ng-init="initServiceDrop()">
+
+<fieldset class="customer-section" ng-if="pageMode == 'SERVICE_PICKUP' ">
+ <legend class="customer-section">Customer details</legend>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="cust-name" style="padding-top:0px">Name:</label>
+                <div class="col-sm-8" ng-bind="serviceRequest.customerInfo.name"></div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label class="control-label col-sm-3" for="cust-phone" style="padding-top:0px">Phone No:</label>
+                <div class="col-sm-9" ng-bind="serviceRequest.customerInfo.phone"></div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="form-group"><label class="control-label col-sm-2" for="cust-address" style="padding-top:0px">Address:</label>
+                <div class="col-sm-8" ng-bind="serviceRequest.customerInfo.address"></div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label class="control-label col-sm-3" for="cust-sales-date" style="padding-top:0px">Date Submitted: {{opened}}</label>
+                <div class="col-md-9" ng-bind="serviceRequest.serviceDate"></div>
+            </div>
+        </div>
+    </div>
+    </div>
+</fieldset>
+
+<fieldset class="product-list-section" ng-if="serviceRequest.productInfo.length > 0 ">
+ <legend class="product-list-section">Product List</legend>
+    <div class="center-block width-97" style="margin:0 auto">
+        <table st-table="selectedProducts" class="table table-bordered">
+            <thead>
+            <tr style="background-color:#f5f2f0">
+                <th style="width:2%">#</th>
+                <th style="width:30%">Particulars</th>
+                <th style="width:30%">serial No</th>
+                <th style="width:30%">Model No</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="row in serviceRequest.productInfo track by $index">
+                <td>
+                  <input type="checkbox" checklist-model="serviceRequest.selectedProductList" checklist-value="row.id">
+                </td>                
+                <td>{{row.name}}</td>
+                <td>{{row.sn}}</td>
+                <td>{{row.sn}}</td>
+            </tr>
+            </tbody>
+            <tfoot>
+                <th colspan="4">&nbsp;</th>
+            </tr>
+            </tfoot>
+        </table>
+    </div>  
+</fieldset>
+
+<fieldset class="service-section">
+ <legend class="service-section">Service details</legend>
+    <div class="center-block width-97" style="margin:0 auto">
+     <div class="row">
+      <div class="form-group col-sm-4">
+        <div class="panel panel-default height width-97">
+            <div class="panel-heading">Accessries</div>
+            <div class="panel-body">
+                <div ng-repeat="accessory in accessoryList  track by $index">
+                    {{accessory}}
+                </div>       
+            </div>
+        </div>      
+      </div>
+      <div class="form-group col-sm-4">
+        <div class="panel panel-default height width-97">
+            <div class="panel-heading">Problems</div>
+            <div class="panel-body">
+                <div ng-repeat="problem in problemLists  track by $index">
+                 {{problem}}
+                </div>     
+            </div>
+        </div>      
+      </div>
+      <div class="form-group col-sm-4">
+        <div class="panel panel-default height width-97">
+            <div class="panel-heading">Observation</div>
+            <div class="panel-body">
+                <strong>Nature of Complaints</strong>
+                <div ng-bind="serviceRequest.customerComment"></div>
+                <br>
+                <strong>Remark</strong>
+                <div ng-bind="serviceRequest.shopUserComment"></div>
+            </div>
+        </div>       
+      </div>
+    </div> 
+    
+    <div class="row">
+      <div class="form-group col-sm-4">
+        <div class="panel panel-default height width-97">
+            <div class="panel-heading">Item Received Mode</div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="form-group">
+                        <label class="control-label col-sm-4" for="cust-name" style="padding-top:0px">How it is received:</label>
+                        <div class="col-sm-4">
+                            {{productReceivedMode.receivedType}}
+                        </div>
+                    </div>
+                </div>       
+                <div ng-if="productReceivedMode.receivedType == 'courier'">
+                    <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label class="control-label col-sm-4" for="cust-name">Courier Name:</label>
+                                    <div class="col-sm-8">
+                                        <input class="form-control" type="text" ng-model="serviceRequest.courierInfo.courierName" placeholder="Courier Name" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label class="control-label col-sm-4" for="cust-phone">Phone No:</label>
+                                    <div class="col-sm-8">
+                                        <input class="form-control" type="text" ng-model="serviceRequest.courierInfo.courierPhone" placeholder="Courier Phone No." />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label class="control-label col-sm-4" for="cust-phone">Phone No:</label>
+                                    <div class="col-sm-8">
+                                        <input class="form-control" type="text" ng-model="serviceRequest.courierInfo.courierDocumentNo" placeholder="Courier Document Number" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                
+                </div>
+            </div>
+        </div>      
+      </div>    
+      <div class="form-group col-sm-8">
+        <div class="panel panel-default height width-97">
+            <div class="panel-heading">Payment Info</div>
+            <div class="panel-body">
+             <div style="width:90%; margin:0 auto">
+                 <div class="form-group row">
+                    <div class="col-xs-2">
+                        <label>Advance Paument Made</label>
+                    </div>
+                    <div class="col-xs-10">
+                        <label>Advance Paument Made</label>
+                    </div>
+                 
+                 </div>
+                <div class="form-group row">
+                    
+                    <div class="col-xs-2">
+                        <label for="paymentInfoPaymentType">Payment Mode</label>
+                        <select ng-model="paymentInfo.paymentType" class="form-control" id="paymentInfoPaymentType">
+                            <option ng-repeat="payType in paymentInfo.paymentTypes" value="{{payType.value}}">{{payType.name}}</option>
+                        </select>
+                    </div>
+                    
+                    <div class="col-xs-10">
+                            <div class="row" ng-show="paymentInfo.paymentType === 'cash' ">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <br/>
+                                        <label class="control-label col-sm-2" for="payment-cash-ammount">Cash Ammount:</label>
+                                        <div class="col-sm-8">
+                                            <input autocomplete="off" ng-model="paymentInfo.cash.amount" type="text" class="form-control" id="payment-cash-ammount" 
+                                            placeholder="Cash Ammount">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                                
+                            <div class="row" ng-show="paymentInfo.paymentType === 'cheq' ">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-3" for="cheque-amount">Amount:</label>
+                                        <div class="col-sm-8">
+                                            <input autocomplete="off" ng-model="paymentInfo.cheq.amount" type="text" class="form-control" 
+                                            id="cheque-amount" placeholder="Enter amount"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-3" for="cheque-bank">Bank:</label>
+                                        <div class="col-sm-8">
+                                            <input  autocomplete="off" ng-model="paymentInfo.cheq.bankName" type="text" class="form-control" 
+                                            id="cheque-bank" placeholder="Enter bank name"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" ng-show="paymentInfo.paymentType === 'cheq' ">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-3" for="cheque-chequeNo">Cheque No:</label>
+                                        <div class="col-sm-8">
+                                            <input autocomplete="off" ng-model="paymentInfo.cheq.cheqNo" type="text" 
+                                            class="form-control" id="cheque-chequeNo" placeholder="Enter Cheque Number"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-3" for="cheque-chequeDate">Cheque Date:</label>
+                                        <div class="col-sm-8">
+                                            <input autocomplete="off" ng-model="paymentInfo.cheq.cheqDate" type="text" 
+                                            class="form-control" id="cheque-chequeDate" placeholder="Enter Cheque Date"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row" ng-show="paymentInfo.paymentType === 'card' ">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-3" for="card-amount">Amount:</label>
+                                        <div class="col-sm-8">
+                                            <input autocomplete="off" ng-model="paymentInfo.card.amount" type="text" class="form-control" 
+                                            id="card-amount" placeholder="Enter amount"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-3" for="card-cardNumber">Card Number:</label>
+                                        <div class="col-sm-8">
+                                            <input autocomplete="off" ng-model="paymentInfo.card.cardNumber" type="text" 
+                                            class="form-control" id="card-cardNumber" placeholder="E.g. 1234-4564-7891-1234"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>                    
+                            <div class="row" ng-show="paymentInfo.paymentType === 'card' ">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-3" for="card-cardNetwork">Card Network:</label>
+                                        <div class="col-sm-8">
+                                            <input autocomplete="off" ng-model="paymentInfo.card.bankName" type="text" class="form-control" 
+                                            id="card-cardNetwork" placeholder="E.g VISA, MasterCard .."/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>    
+                </div>  
+             </div>    
+            </div>
+        </div>      
+      </div>    
+    </div>
+  </div>  
+</fieldset>
+
+<fieldset class="sales-operation-section" ng-if="serviceRequest.productInfo.length && serviceRequest.pageMode == 'SERVICE_PICKUP' && serviceRequest.selectedProductList">
+    <!--<legend class="sales-operation-section">Final Step</legend>-->
+    <div class="form-group width-97" style="margin:0 auto">
+        <button type="submit" class="btn btn-block btn-success" 
+        ng-disabled="serviceRequest.selectedProductList.length==0"
+        ng-click='performServicePickup()'>Deliver Product</button>
+    </div>    
+</fieldset>
+
+</form>
