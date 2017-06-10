@@ -51,6 +51,13 @@ angular.module('salesApp.sales', ['ngRoute' , 'smart-table', 'ui.bootstrap'])
     
     $scope.taxTypeTotal = {};
     
+    $scope.salesDateFocus = function(event,a,b,c){
+        console.log(event);
+        console.log(a);
+        console.log(b);
+        console.log(c);
+    }
+    
     var setInitialValuforTotals = function(){
         return {
             taxAmmount:0,
@@ -151,6 +158,8 @@ angular.module('salesApp.sales', ['ngRoute' , 'smart-table', 'ui.bootstrap'])
         $scope.customerDetails.id = value.id || null;
         $scope.customerDetails.phone = value.phone || '';
         $scope.customerDetails.address = value.address || '';
+        $scope.customerDetails.email = value.email || "";
+        $scope.customerDetails.alternateNo = value.contact2 || "";
     }
     
     $scope.setFocusTo = function(formElementToFocus){

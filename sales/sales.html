@@ -26,10 +26,10 @@
 <fieldset class="customer-section">
  <legend class="customer-section">Customer details</legend>
     <div class="row">
-        <div class="col-sm-6">
+        <div class="col-sm-5">
             <div class="form-group">
                 <label class="control-label col-sm-2" for="cust-name">Name:</label>
-                <div class="col-sm-8">
+                <div class="col-sm-10">
                     <!--<input ng-model="customerName" type="text" class="form-control" id="cust-name" placeholder="Enter customer name"/> <br/>-->
                     <input type="text" ng-model="customerDetails.name" placeholder="search customer" 
                     uib-typeahead="customer_detail as (customer_detail.name + ' ## ' + customer_detail.phone + ' ## ' + customer_detail.address) 
@@ -53,14 +53,14 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-5">
+        <div class="col-sm-6">
           <div class="row">  
             <div class="col-sm-6">
                 <div class="form-group">
                     <label class="control-label col-sm-4" for="cust-phone">Phone No:</label>
                     <div class="col-sm-8">
                         <input autocomplete="off" ng-model="customerDetails.phone" type="text" 
-                        class="form-control"  ng-enter="setFocusTo('customerDetailsAddress')" 
+                        class="form-control"  ng-enter="setFocusTo('custPhoneAlternate')" 
                         id="cust-phone" name="custPhone" placeholder="Enter customer Phone Number">
                     </div>
                 </div>
@@ -79,19 +79,33 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-6">
+        <div class="col-sm-5">
             <div class="form-group"><label class="control-label col-sm-2" for="cust-address">Address:</label>
-                <div class="col-sm-8">
-                    <input type="text" ng-model="customerDetails.address" placeholder="Enter Customer Address" 
+                <div class="col-sm-10">
+                    <input type="text"  ng-enter="setFocusTo('customerEmail')"  name="customerDetailsAddress" 
+                    ng-model="customerDetails.address" placeholder="Enter Customer Address" 
                     class="form-control" 
                     />                   
                 </div>
             </div>
         </div>
-        <div class="col-sm-5">
+        <div class="col-sm-6">
             <div class="form-group">
                 <div class="row">
-                
+                <div class="col-md-6">
+                <label class="control-label col-sm-4" for="cust-email-id">Email:</label>
+                <div class="col-md-8">
+                     <input
+                            class="form-control"
+                            type="email"
+                            id="cust-email-id"
+                            name="customerEmail"
+                            ng-model="customerDetails.email" 
+                            placeholder="Enter Customer E-mail"
+                            ng-enter="setFocusTo('salesDate')"
+                            />              
+                </div>
+                </div>
                 <div class="col-md-6">
                 <label class="control-label col-sm-4" for="cust-sales-date">Date: {{opened}}</label>
                 <div class="col-md-8">
@@ -105,25 +119,10 @@
                             popup="d MMM yyyy"
                             options="dateOptions"
                             opened="opened"
+                            ng-enter="setFocusTo('currentProductName')"
                             my-datepicker/>              
                 </div>
                 </div>
-                
-                <div class="col-md-6">
-                <label class="control-label col-sm-4" for="cust-email-id">Email:</label>
-                <div class="col-md-8">
-                     <input
-                            class="form-control"
-                            type="email"
-                            id="cust-email-id"
-                            name="customerEmail"
-                            ng-model="customerDetails.email" 
-                            placeholder="Enter Customer E-mail"
-                            />              
-                </div>
-                </div>
-                
-                
                 </div>
             </div>
         </div>

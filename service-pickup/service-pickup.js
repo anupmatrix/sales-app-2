@@ -31,7 +31,7 @@ angular.module('salesApp.report', ['ngRoute'])
 		return !(row.serviceStatus === 'C');
 	}
 	$scope.init= function(){
-		updateMyLink();
+		///updateMyLink();
 		$scope.selectedFilterOption = $scope.searchFilterOptions[0];
 		$scope.errorInSearchOptions = "";
 		$scope.serviceDateFromModel="";

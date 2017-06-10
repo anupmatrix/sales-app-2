@@ -168,6 +168,8 @@ function($scope, $http, $modal, $log, customerSearch, productSearch, taxService,
         $scope.serviceRequest.customerInfo.id = value.id || null;
         $scope.serviceRequest.customerInfo.phone = value.phone || '';
         $scope.serviceRequest.customerInfo.address = value.address || '';
+        $scope.serviceRequest.customerInfo.email = value.email || '';
+        $scope.serviceRequest.customerInfo.alternateNo = value.contact2 || '';
     }
     
     var setProductContainerToPristine = function(){
@@ -240,7 +242,8 @@ function($scope, $http, $modal, $log, customerSearch, productSearch, taxService,
     }
     
     $scope.setFocusTo = function(formElementToFocus){
-        document.getElementById(formElementToFocus).focus();
+        //document.getElementById(formElementToFocus).focus();
+        document.serviveForm[formElementToFocus].focus();
     };
     
     $scope.addProduct = function(){
@@ -335,6 +338,7 @@ function($scope, $http, $modal, $log, customerSearch, productSearch, taxService,
         $scope.curentProduct.id = value.id || "";
         $scope.curentProduct.name = value.name || '';
         $scope.curentProduct.model = value.model || '';
+        
     };
     
     $scope.isValidProductInfoforAdd = function(){

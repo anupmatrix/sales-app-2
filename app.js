@@ -1,7 +1,7 @@
 'use strict';
 
 // Declare app level module which depends on views, and components
-angular.module('salesApp', [
+var salesApp = angular.module('salesApp', [
   'ngRoute',
   'salesApp.view1',
   'salesApp.view2',
@@ -47,3 +47,11 @@ config(['$locationProvider', '$routeProvider', function($locationProvider, $rout
   }).
   otherwise({redirectTo: '/sales'});
 }]);
+
+
+salesApp.controller("HeaderController", function($scope, $location){
+    $scope.isActive = function (viewLocation) {
+        //return $location.path().indexOf(viewLocation) === 0;
+        return $location.path() === viewLocation;
+    };
+})
