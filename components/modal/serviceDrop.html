@@ -62,78 +62,23 @@
         </tr>
         <tr>
             <td>
-                <div ng-repeat="accessory in serviceRequest.accessoryList  track by $index">
-                  {{accessory}}
-                </div>       
                 <div ng-if="serviceRequest.accessoryList.length == 0">
                   N/A
                 </div>     
+                <div ng-if="serviceRequest.accessoryList.length > 0">
+                  {{serviceRequest.accessoryList.join(', ')}}
+                </div>     
             </td>
             <td>
-                <div ng-repeat="problem in serviceRequest.problemLists  track by $index">
-                  {{problem}}
-                </div>     
                 <div ng-if="serviceRequest.problemLists.length == 0">
                   N/A
                 </div>     
+                <div ng-if="serviceRequest.problemLists.length > 0 ">
+                  {{serviceRequest.problemLists.join(', ')}}
+                </div>     
             </td>
             <td>
-            <table class="table table-condensed no-border invoice-margin" ng-if="paymentInfo.paymentType == 'cash'">
-                <tr>
-                    <td style="width:33%"><span class="pull-right">Payment Mode : </span></td>
-                    <td>&nbsp; CASH</td>
-                </tr>
-                <tr>
-                    <td><span class="pull-right">Amount : </span></td>
-                    <td>&nbsp; {{paymentInfo.cash.amount}}</td>
-                </tr>
-            </table>
-            <table class="table table-condensed no-border invoice-margin" ng-if="paymentInfo.paymentType == 'cheq'">
-                <tr>
-                    <td style="width:33%"><span class="pull-right">Payment Mode : </span></td>
-                    <td>&nbsp; CHEQUE</td>
-                </tr>
-                <tr>
-                    <td><span class="pull-right">Amount : </span></td>
-                    <td>&nbsp; {{paymentInfo.cheq.amount}}</td>
-                </tr>
-                <tr>
-                    <td><span class="pull-right">Cheque No : </span></td>
-                    <td>&nbsp; {{paymentInfo.cheq.cheqNo}}</td>
-                </tr>
-                <tr>
-                    <td><span class="pull-right">Bank : </span></td>
-                    <td>&nbsp; {{paymentInfo.cheq.bankName}}</td>
-                </tr>    
-                <tr>    
-                    <td><span class="pull-right">Cheque Date : </span></td>
-                    <td>&nbsp; {{paymentInfo.cheq.cheqDate}}</td>
-                </tr>
-            </table>
-            <table class="table table-condensed no-border invoice-margin" ng-if="paymentInfo.paymentType == 'card'">
-                <tr>
-                    <td style="width:33%"><span class="pull-right">Payment Mode : </span></td>
-                    <td>&nbsp; CARD</td>
-                </tr>
-                <tr>
-                    <td><span class="pull-right">Amount : </span></td>
-                    <td>&nbsp; {{paymentInfo.card.amount}}</td>
-                </tr>
-                <tr>
-                    <td><span class="pull-right">Card No : </span></td>
-                    <td>&nbsp; {{paymentInfo.card.cardNumber}}</td>
-                </tr>
-                <tr>
-                    <td><span class="pull-right">Bank : </span></td>
-                    <td>&nbsp; {{paymentInfo.card.bankName}}</td>
-                 </tr>
-                 <tr>
-                    <td><span class="pull-right">Card Network : </span></td>
-                    <td>&nbsp; {{paymentInfo.card.cardNetwork}}</td>
-                </tr>
-            </table>
-
-
+                <div ng-include="'components/template/paymentModeDisplay.html'"></div>
             </td>
         </tr>
     </table>

@@ -14,8 +14,9 @@ function($scope, $http, $modal, $log, customerSearch, productSearch, taxService,
     $scope.serviceResponse = [];
     $scope.serviceDate = new Date();
     $scope.serviceOrderDate = new Date();
-    
+    $scope.paymentInfo = Util.paymentInfoObj();
     $scope.printPage = Util.printPage;
+
     $scope.serviceRequest = {
         selectedProductList:[],
         problemLists:[],
@@ -75,6 +76,7 @@ function($scope, $http, $modal, $log, customerSearch, productSearch, taxService,
         }
         
     };
+
     var resetOtherPaymentTypes = function(paymentInfo){
         if(paymentInfo.paymentType == 'cash'){
             paymentInfo.card = {amount:0, bankName:'', cardNumber:'', expDate:'', cardNetwork:'', cardBank:'' };
@@ -89,6 +91,7 @@ function($scope, $http, $modal, $log, customerSearch, productSearch, taxService,
             paymentInfo.card = {amount:0, bankName:'', cardNumber:'', expDate:'', cardNetwork:'', cardBank:'' };
         }    
     }
+
     $scope.performServiceDelivery = function(){
         resetOtherPaymentTypes($scope.paymentInfo)
         $scope.serviceRequest.paymentInfo = angular.copy($scope.paymentInfo);
@@ -99,7 +102,6 @@ function($scope, $http, $modal, $log, customerSearch, productSearch, taxService,
             Util.openPrintPopUp($scope, 'service-drop');
         });
     }
-    
     
     $scope.calculateReaminingPayment = function(){
         var totalPayment = Util.toDecimalPrecision($scope.paymentInfo.totalCharges);
@@ -126,6 +128,7 @@ function($scope, $http, $modal, $log, customerSearch, productSearch, taxService,
             advancePaymentMade += Util.toDecimalPrecision(data.cheq.amount || 0);
         return advancePaymentMade;
     }
+    
     var getPaymentDoneForPickup = function(){
         var advancePaymentMade = 0;
             advancePaymentMade += Util.toDecimalPrecision($scope.serviceRequest.paymentInfo.cash.amount || 0);
@@ -163,6 +166,7 @@ function($scope, $http, $modal, $log, customerSearch, productSearch, taxService,
             dummyProduct.id=44        
             $scope.serviceRequest.productInfo.push(angular.copy(dummyProduct));                       
     };
+    
     $scope.selectCustomerFrmList = function(value){
         $scope.serviceRequest.customerInfo.name = value.name || '';
         $scope.serviceRequest.customerInfo.id = value.id || null;
@@ -201,31 +205,6 @@ function($scope, $http, $modal, $log, customerSearch, productSearch, taxService,
         $scope.serviveForm.currentProductSerialNumber.$setPristine();
     };    
 
-    $scope.paymentInfo = {
-      paymentType: "cash",
-      paymentTypes: [{name: "Cash", value: "cash"},
-                    {name: "Card Pyment", value: "card"},
-                    {name: "Cheque", value: "cheq"}],
-      cardTypes:["RuPay", "VISA", "MaeterCard", "American Express", "Chase", "Discover"],
-      cash: {
-        amount:0
-      },
-      card:{
-        amount:0,
-        bankName:'',
-        cardNumber:'',
-        expDate:'',
-        cardNetwork:'',
-        cardBank:''
-      },
-      cheq:{
-        amount:0,
-        bankName:'',
-        cheqNo:'',
-        cheqDate:''
-      }
-    };
-    
     $scope.removeRow = function removeRow(row) {
         var index = $scope.serviceRequest.productInfo.indexOf(row);
         if (index !== -1) {
@@ -334,6 +313,7 @@ function($scope, $http, $modal, $log, customerSearch, productSearch, taxService,
             });
         });
     };
+   
     $scope.selectProductFrmList = function(value, type){
         $scope.curentProduct.id = value.id || "";
         $scope.curentProduct.name = value.name || '';

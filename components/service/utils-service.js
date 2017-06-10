@@ -89,7 +89,18 @@ angular.module('salesApp.services.Util', ['ui.bootstrap'])
         }
     }
     
-  
+    this.paymentInfoObj = function(){
+        return {
+          paymentType: "cash",
+          paymentTypes: [{name: "Cash", value: "cash"}, {name: "Card Pyment", value: "card"},
+                        {name: "Cheque", value: "cheq"}, {name: "Online", value: "online"}],
+          cardTypes:["RuPay", "VISA", "MaeterCard", "American Express", "Chase", "Discover"],
+          cash:     {amount:0},
+          card:     {amount:0, bankName:'', cardNumber:'', expDate:'', cardNetwork:'', cardBank:''},
+          cheq:     {amount:0, bankName:'', cheqNo:'', cheqDate:''},
+          online:   {amount:0, payMode:'', transactionId:'', remark:''}
+        }
+    }
 }   
 ])
 
