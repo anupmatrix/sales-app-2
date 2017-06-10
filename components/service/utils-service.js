@@ -60,38 +60,29 @@ angular.module('salesApp.services.Util', ['ui.bootstrap'])
   };
 
     this.getPrintPage = function(pageType){
-        var printPageTemplate = "";
-        switch(pageType) {
-            case "service-drop":
-                printPageTemplate = 'components/modal/serviceDrop.html';
-                break;
-            case "service-deliver":
-                printPageTemplate = 'components/modal/serviceDelivery.html';
-                break;
-            case "sales-complete":
-                printPageTemplate = 'components/modal/salesComplete.html';
-                break;
-            case "service-complete":
-                printPageTemplate = 'components/modal/serviceDelivery.html';
-                break;
-            case "tech-update":
-                printPageTemplate = 'components/modal/techUpdate.html';
-                break;    
-            default:
-                printPageTemplate = 'components/modal/salesComplete.html';
-        }
+        var printPageTemplate = 'components/modal/nothingSelected.html';
+        var pageTypeTemplateMapping = { 'service-drop':'components/modal/serviceDrop.html',
+                                        'service-drop': 'components/modal/serviceDrop.html',
+                                        'service-deliver': 'components/modal/serviceDelivery.html',
+                                        'sales-complete': 'components/modal/salesComplete.html',
+                                        'service-complete': 'components/modal/serviceDelivery.html',
+                                        'tech-update': 'components/modal/techUpdate.html'
+        };
         
+        if(pageTypeTemplateMapping[pageType] !== undefined){
+            printPageTemplate = pageTypeTemplateMapping[pageType];
+        }
         return printPageTemplate;
     }
 
     this.printPage = function(){
         var printContents = document.getElementById("invoice-modal-full-123").innerHTML;
-        var popupWin = window.open("print.html", "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=500,left=500,width=400,height=400");    
+        var popupWin = window.open("print.html", "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=100,left=200,width=400,height=400");    
         if(popupWin){
             popupWin.window.onload = function() {
                 popupWin.document.getElementById("masterContent").innerHTML = printContents;
                 popupWin.window.print();
-                popupWin.window.close();  
+                setTimeout(function () { popupWin.close(); }, 100);
             };
         }else{
             alert("Plese disable your pop-up blocker.. for this domain");

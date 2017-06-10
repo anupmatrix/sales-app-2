@@ -19,6 +19,7 @@
                     name="customerName"
                     autocomplete="off"
                     ng-enter="setFocusTo('custPhone')"
+                    typeahead-focus-first="false"
                     autofocus
                     required
                     />    
@@ -89,6 +90,7 @@
             autocomplete="off"
             required
             max-length="100"
+            typeahead-focus-first="false"
             />    
             <span class="errMsg" ng-show="serviveForm.currentProductName.$touched && serviveForm.currentProductName.$error.required">Enter Product name.</span>
         </div>
@@ -108,6 +110,7 @@
             autocomplete="off"
             required
             max-length="100"
+            typeahead-focus-first="false"
             />    
        </div> 
       </div>
@@ -228,12 +231,11 @@
             <div class="panel-body">
                 Nature of Complaints
                 <textarea ng-model="serviceRequest.customerComment" name="customerComment" 
-                class="form-control ng-pristine ng-untouched ng-valid ng-empty" id="cust-address" placeholder="Enter customer Address"></textarea>
+                class="form-control ng-pristine ng-untouched ng-valid ng-empty" id="cust-address" placeholder="Enter Nature of Complaints"></textarea>
                 <br>
                 Remark
                 <textarea ng-model="serviceRequest.shopUserComment" name="shopUserComment" 
-                class="form-control ng-pristine ng-untouched ng-valid ng-empty" id="cust-address" placeholder="Enter customer Address"></textarea>
-                
+                class="form-control ng-pristine ng-untouched ng-valid ng-empty" id="cust-address" placeholder="Enter Remark"></textarea>
             </div>
         </div>       
       </div>
@@ -276,7 +278,7 @@
                             </div>
                             <div class="col-sm-12">
                                 <div class="form-group">
-                                    <label class="control-label col-sm-4" for="cust-phone">Phone No:</label>
+                                    <label class="control-label col-sm-4" for="cust-phone">Document Number:</label>
                                     <div class="col-sm-8">
                                         <input class="form-control" type="text" ng-model="serviceRequest.courierInfo.courierDocumentNo" placeholder="Courier Document Number" />
                                     </div>
