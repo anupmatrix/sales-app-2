@@ -7,5 +7,20 @@ angular.module('salesApp.status', ['ngRoute' , 'smart-table', 'ui.bootstrap'])
   });
 }])
 .controller('TechnicianStatusCtrl', ['$scope', '$http', '$uibModal', '$log','Util' ,function($scope, $http, $modal, $log,Util) {
+  
+  $scope.init = function(){
+    $scope.resetModel();
+  }
+  $scope.resetModel = function(){
+    $scope.statusSearchTextModel = "";
+    
+    $scope.statusSearchFilterOptions =  [ "ALL","SERVICE ID","SERIAL NUMBER", "PRODUCT NAME","CUSTOMER PHONE", "CUSTOMER NAME"];
+    $scope.statusSelectedSearchFilterOptionsModel  =$scope.statusSearchFilterOptions[0];
 
+
+  }
+
+  $scope.statusSearchTextAsPerFilterOption = function(){
+    console.log(" CLICKED ");
+  }
 }]);
