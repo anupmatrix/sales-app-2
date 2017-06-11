@@ -55,25 +55,30 @@
         
         window.onhashchange = function () {
             var winHash = window.location.hash;
-			var activeElem = document.getElementsByClassName("top-menu");
-			console.log(activeElem);
-			if(activeElem.length >0 ){
-				for(var i=0; i<activeElem.length; i++){
-					activeElem[i].classList.remove('active');				
-				}
-			}
+      			var activeElem = document.getElementsByClassName("top-menu");
+      			if(activeElem.length >0 ){
+      				for(var i=0; i<activeElem.length; i++){
+      					activeElem[i].classList.remove('active');				
+      				}
+      			}
 			
-			
-			console.log(winHash);
-			switch(winHash){
-			case "#!/myjobs":
-				document.getElementById('pendingjobs-top-menu').classList.add('active');
-			break;
-			case "#!/completed":
-				document.getElementById('completedjobs-top-menu').classList.add('active');
-			break;
-					
-			}
+      			switch(winHash){
+        			case "#!/new":
+        				document.getElementById('new-top-menu').classList.add('active');
+        			break;
+        			case "#!/completed":
+        				document.getElementById('completed-top-menu').classList.add('active');
+        			break;
+              case "#!/pending":
+                document.getElementById('pending-top-menu').classList.add('active');
+              break;
+              case "#!/customer-approval-jobs":
+                document.getElementById('customer-approval-jobs-top-menu').classList.add('active');
+              break;
+              case "#!/part-pending-jobs":
+                document.getElementById('part-pending-jobs-top-menu').classList.add('active');
+              break;
+      			}
         } 	       
      </script>
 </head>
@@ -83,7 +88,11 @@
             <div class="navbar-header"><a class="navbar-brand" href="#">Naik Camera Emporium</a></div>
             <div id="navbar" class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
-                    <li class="top-menu" id="pendingjobs-top-menu" ><a href="#!/myjobs">Technician Jobs</a></li>
+                    <li class="top-menu" id="new-top-menu" ><a href="#!/new">New Jobs</a></li>
+                    <li class="top-menu" id="completed-top-menu" ><a href="#!/completed">Completed Jobs</a></li>
+                    <li class="top-menu" id="pending-top-menu" ><a href="#!/pending">Technician Handle </a></li>
+                    <li class="top-menu" id="customer-approval-jobs-top-menu" ><a href="#!/customer-approval-jobs">Customer Approval </a></li>
+                    <li class="top-menu" id="part-pending-jobs-top-menu" ><a href="#!/part-pending-jobs">Part Pending</a></li>
 
                     <!--
                     <li class="top-menu" id="completedjobs-top-menu"><a href="#!/completed">Compeleted Jobs</a></li> -->
@@ -91,7 +100,7 @@
                 </ul>
                 
                 <ul class="nav navbar-nav navbar-right">
-                      <li style="margin-top:5px;"><button onclick="openInNewTab2('index.html')" class="btn btn-success" type="submit">LogOut</button></li>
+                      <li style="margin-top:5px;"><button onclick="openInNewTab2('index.html')" class="btn btn-success" type="submit">Logout</button></li>
                 </ul>    
                               
             </div>
@@ -116,7 +125,10 @@
 
   <script src="tech-app.js"></script>
   <script src="tech-flow/tech.js"></script>
-  <script src="tech-flow/completed.js"></script>
+  <script src="tech-flow/complete/completed.js"></script>
+  <script src="tech-flow/ca/ca.js"></script>
+  <script src="tech-flow/pp/pp.js"></script>
+  <script src="tech-flow/th/th.js"></script>
 
   <script type="text/ng-template" id="custom-datepicker.html">
     <div class="form-inline enhanced-datepicker">
@@ -139,6 +151,8 @@
 </script>
   
   <script src="components/service/utils-service.js"></script>
+  <script src="components/service/tech-jobs-search-service.js"></script>
+  <script src="components/service/customer-service.js"></script>
   <script src="components/date/date.js"></script>
   <script src="components/date/date-directive.js"></script>
   <script src="components/modal/modal.js"></script>

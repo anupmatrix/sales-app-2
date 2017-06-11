@@ -4,7 +4,7 @@ angular.module('salesApp.completed', ['ngRoute'])
 
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/completed', {
-    templateUrl: 'tech-flow/completed.html',
+    templateUrl: 'tech-flow/complete/completed.html',
     controller: 'CompletedCtrl'
   });
 }])

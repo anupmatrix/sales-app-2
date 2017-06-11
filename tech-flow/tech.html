@@ -35,9 +35,16 @@
                             <option ng-repeat="x in searchFilterOptions" value="{{x}}">{{x}}</option>
                         </select>
                     </label>
-
-
             </div>
+
+            <div class="col-sm-3" >
+                    <label class="control-label" >
+                             <button  class="form-control btn btn-sm btn-info"  
+                                     ng-click="clearSearchCriteria()">Clear Search</button>
+                       
+                    </label>
+            </div>
+
 
             <span class="errMsg">{{serviceSearchCriteriaIncomplete}}</span>
            

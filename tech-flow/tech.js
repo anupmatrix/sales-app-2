@@ -1,7 +1,7 @@
 'use strict';
 angular.module('salesApp.tech', ['ngRoute' , 'smart-table', 'ui.bootstrap'])
 .config(['$routeProvider', function($routeProvider) {
-  $routeProvider.when('/myjobs', {
+  $routeProvider.when('/new', {
     templateUrl: 'tech-flow/tech.html',
     controller: 'TechnicianCtrl'
   });
@@ -116,5 +116,9 @@ angular.module('salesApp.tech', ['ngRoute' , 'smart-table', 'ui.bootstrap'])
                   });
         }
     } 
+
+    $scope.clearSearchCriteria = function(){
+        
+    }
 
 }]);
