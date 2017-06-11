@@ -4,6 +4,7 @@
 angular.module('salesApp', [
   'ngRoute',
   'salesApp.tech',
+  'salesApp.status',
   'salesApp.completed',
   'salesApp.partPending',
   'salesApp.customerApproval',
@@ -18,5 +19,5 @@ angular.module('salesApp', [
 ]).
 config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
   $locationProvider.hashPrefix('!');
-  $routeProvider.otherwise({redirectTo: '/new'});
+  $routeProvider.otherwise({redirectTo: '/status'});
 }]);

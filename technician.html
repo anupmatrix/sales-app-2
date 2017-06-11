@@ -78,6 +78,9 @@
               case "#!/part-pending-jobs":
                 document.getElementById('part-pending-jobs-top-menu').classList.add('active');
               break;
+              case "#!/status":
+                document.getElementById('status-top-menu').classList.add('active');
+              break;
       			}
         } 	       
      </script>
@@ -88,6 +91,7 @@
             <div class="navbar-header"><a class="navbar-brand" href="#">Naik Camera Emporium</a></div>
             <div id="navbar" class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
+                    <li class="top-menu" id="status-top-menu" ><a href="#!/status">Status</a></li>
                     <li class="top-menu" id="new-top-menu" ><a href="#!/new">New Jobs</a></li>
                     <li class="top-menu" id="completed-top-menu" ><a href="#!/completed">Completed Jobs</a></li>
                     <li class="top-menu" id="pending-top-menu" ><a href="#!/pending">Technician Handle </a></li>
@@ -124,6 +128,8 @@
   <script src="Vendor/angular/smart-table.min.js"></script>
 
   <script src="tech-app.js"></script>
+
+  <script src="tech-flow/status/tech-status.js"></script>
   <script src="tech-flow/tech.js"></script>
   <script src="tech-flow/complete/completed.js"></script>
   <script src="tech-flow/ca/ca.js"></script>
