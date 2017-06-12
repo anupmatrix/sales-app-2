@@ -32,6 +32,33 @@ angular.module('salesApp.services.Util', ['ui.bootstrap'])
         return taxValue;
     };
     
+    this.openBasicPopUp = function($scope, page ,size) {
+        var modalInstance;
+        var modalScope = $scope.$new();
+        var printPageTemplate = this.getPrintPage(page);
+        
+        modalScope.ok = function () {
+                modalInstance.close(modalScope.selected);
+        };
+        modalScope.cancel = function () {
+                modalInstance.dismiss('cancel');
+        };      
+        
+        modalInstance = $modal.open({
+          template: '<print-modal-directive page="'+printPageTemplate+'"></print-modal-directive>',
+          size: size || 'lg',
+          scope: modalScope
+          }
+        );
+
+        modalInstance.result.then(function (selectedItem) {
+          //$scope.selected = selectedItem;
+        }, function (a,b,c) {
+          //$log.info('Modal dismissed at: ' + new Date());
+           // window.location.reload();
+        });
+  };
+
     this.openPrintPopUp = function($scope, page ,size) {
         var modalInstance;
         var modalScope = $scope.$new();

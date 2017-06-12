@@ -13,14 +13,25 @@ angular.module('salesApp.status', ['ngRoute' , 'smart-table', 'ui.bootstrap'])
   }
   $scope.resetModel = function(){
     $scope.statusSearchTextModel = "";
-    
-    $scope.statusSearchFilterOptions =  [ "ALL","SERVICE ID","SERIAL NUMBER", "PRODUCT NAME","CUSTOMER PHONE", "CUSTOMER NAME"];
+    $scope.itemSelectionError ="";
+    $scope.currentJobStatusList=[];
+    $scope.statusSearchFilterOptions =  [ "ALL","SERVICE_ID","SERIAL_NUMBER", "PRODUCT_NAME","CUSTOMER_PHONE", "CUSTOMER_NAME"];
     $scope.statusSelectedSearchFilterOptionsModel  =$scope.statusSearchFilterOptions[0];
 
 
   }
 
   $scope.statusSearchTextAsPerFilterOption = function(){
-    console.log(" CLICKED ");
+
+
+      $http.get('fixture/searchForStatus.json?v='+(Math.random()),{
+          params: {
+            text: $scope.statusSearchTextModel,
+            filter: $scope.statusSelectedSearchFilterOptionsModel
+          }
+        }).then(function(response){
+            $scope.currentJobStatusList = response.data.searchResults;
+        });
+
   }
 }]);

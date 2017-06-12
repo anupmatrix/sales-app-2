@@ -73,13 +73,10 @@ angular.module('salesApp.tech', ['ngRoute' , 'smart-table', 'ui.bootstrap'])
 
     $scope.updateStatusClicked = function(row){
         $scope.selectedItemForUpdate = row;
-        Util.openPrintPopUp($scope, 'tech-update');
+        Util.openBasicPopUp($scope, 'tech-update');
     } 
     
-    $scope.reloadPage = function(){
-        window.location.reload();
-    }
-
+    
     $scope.statusIsUpdated = function(){
       var domList = document.getElementsByClassName("my-product-info")
       var techCommentDom = document.getElementById("techCommentsIDModal")  ;
